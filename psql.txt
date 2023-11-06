@@ -1,0 +1,41 @@
+ep-green-hall-71202148.ap-southeast-1.aws.neon.tech
+ratemykos
+rplsembilan
+qTu27CpWyMXh
+
+
+CREATE TABLE users(
+	User_ID SERIAL PRIMARY KEY,
+	email TEXT UNIQUE NOT NULL,
+ 	Username VARCHAR(20) UNIQUE NOT NULL,
+ 	Password TEXT NOT NULL
+);
+SELECT * FROM users;
+
+CREATE TABLE kos(
+	Kos_ID SERIAL PRIMARY KEY,
+ 	Name TEXT NOT NULL,
+	Location TEXT NOT NULL,
+	Description TEXT,
+	Rating INT
+);
+SELECT * FROM kos;
+
+CREATE TABLE ratings(
+	User_ID INT, 
+ 	Kos_ID INT,
+	rating NUMERIC,
+ 	UNIQUE (User_ID, Kos_ID)
+);
+SELECT * FROM ratings;
+
+CREATE TABLE comments(
+	Comment_ID SERIAL PRIMARY KEY,
+ 	Comment TEXT NOT NULL,
+ 	User_ID INT NOT NULL,
+	Kos_ID INT NOT NULL,
+	Reply_ID INT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+SELECT * FROM comments;
+
