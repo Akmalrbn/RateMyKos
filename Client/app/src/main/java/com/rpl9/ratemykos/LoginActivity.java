@@ -19,43 +19,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     BaseApiService mApiService;
-    EditText emailText, usernameText, passwordText;
+    EditText identifierText, passwordText;
     TextView reg;
-    Button regButton;
+    Button loginButton;
     Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
         mApiService = UtilsApi.getApiService();
         mContext = this;
-        emailText = findViewById(R.id.registerEmail);
-        usernameText = findViewById(R.id.registerUsername);
-        passwordText = findViewById(R.id.registerPassword);
-        regButton = findViewById(R.id.registerButton);
+        identifierText = findViewById(R.id.username);
+        passwordText = findViewById(R.id.password);
+        loginButton = findViewById(R.id.loginButton);
         reg = findViewById(R.id.signupTextLogin);
-        regButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = emailText.getText().toString();
-                String username = usernameText.getText().toString();
+                String identifier = identifierText.getText().toString();
                 String password = passwordText.getText().toString();
-                register(email, username, password);
+                login(identifier, password);
             }
         });
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent move = new Intent(RegisterActivity.this, MainActivity.class);
+                Intent move = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(move);
             }
         });
+
+
     }
-    private void register(String emailReg, String usernameReg, String passwordReg) {
-        Call<Account> call = mApiService.register(emailReg, usernameReg, passwordReg);
+    private void login(String identifier, String password) {
+        Call<Account> call = mApiService.login(identifier, password);
         call.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                     String email = account.getEmail();
                     String username = account.getUsername();
                     // Handle a successful login response, e.g., save the token and user information
-                    Intent move = new Intent(RegisterActivity.this, MainActivity.class);
+                    Intent move = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(move);
                 } else {
                     // Handle the error response, e.g., display an error message

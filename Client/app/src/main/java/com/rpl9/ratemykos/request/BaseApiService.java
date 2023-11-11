@@ -21,6 +21,14 @@ public interface BaseApiService {
             @Field("identifier") String identifier,
             @Field("password") String password
     );
+
+    @FormUrlEncoded
+    @POST("/register")
+    Call<Account> register(
+            @Field("email") String email,
+            @Field("username") String username,
+            @Field("password") String password
+    );
 }
 
 //    @GET("account/{id}")

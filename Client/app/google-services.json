@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "580277593913",
+    "project_id": "ratemykos",
+    "storage_bucket": "ratemykos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580277593913:android:15127d284a35dd70ef6ae8",
+        "android_client_info": {
+          "package_name": "com.rpl9.ratemykos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA5aplC3B4Hd9TSRe4ccSdIQDJi2M2dN0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
