@@ -1,16 +1,32 @@
 package com.rpl9.ratemykos;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static android.content.ContentValues.TAG;
 
+import static com.rpl9.ratemykos.utils.Constants.ERROR_DIALOG_REQUEST;
+import static com.rpl9.ratemykos.utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.rpl9.ratemykos.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.rpl9.ratemykos.model.Account;
 import com.rpl9.ratemykos.request.BaseApiService;
 import com.rpl9.ratemykos.request.UtilsApi;
@@ -21,12 +37,12 @@ import retrofit2.Response;
 
 
     public class MainActivity extends AppCompatActivity {
-
         BaseApiService mApiService;
         EditText identifierText, passwordText;
-        Button login;
+        Button login, map;
         TextView signUpText;
         Context mContext;
+        private boolean mLocationPermissionGranted = false;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +52,12 @@ import retrofit2.Response;
             mApiService = UtilsApi.getApiService();
             mContext = this;
 
-            login = findViewById(R.id.loginButton);
-            identifierText = findViewById(R.id.username);
-            passwordText = findViewById(R.id.password);
+            if(isServicesOK()){
+                if(isMapsEnabled()){
+                    mapinit();
+                }
+            }
+            login = findViewById(R.id.loginMain);
 
             signUpText = findViewById(R.id.signupText);
             signUpText.setOnClickListener(new View.OnClickListener() {
@@ -52,57 +71,96 @@ import retrofit2.Response;
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String identifier = identifierText.getText().toString();
-                    String password = passwordText.getText().toString();
-                    // Call the login method with the EditText values
-                    login(identifier, password);
+                    Intent move = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(move);
                 }
             });
         }
 
-        private void login(String identifier, String password) {
-            Call<Account> call = mApiService.login(identifier, password);
-            call.enqueue(new Callback<Account>() {
-                @Override
-                public void onResponse(Call<Account> call, Response<Account> response) {
-                    if (response.isSuccessful()) {
-                        Account account = response.body();
-                        String email = account.getEmail();
-                        String username = account.getUsername();
-                        // Handle a successful login response, e.g., save the token and user information
-                        moveToNextActivity();
-                    } else {
-                        // Handle the error response, e.g., display an error message
-                        handleErrorResponse(response);
-                    }
-                }
 
+        private void mapinit(){
+            Toast.makeText(this, "Maps Enabled", Toast.LENGTH_SHORT).show();
+            map = findViewById(R.id.mapButton);
+            map.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onFailure(Call<Account> call, Throwable t) {
-                    // Handle network or request failure
-                    showToast("Network or request failure. Please try again.");
+                public void onClick(View v) {
+                    Intent move = new Intent(MainActivity.this, MapsActivity.class);
+                    startActivity(move);
                 }
             });
         }
+        private boolean checkMapServices(){
+            if(isServicesOK()){
+                if(isMapsEnabled()){
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        private void handleErrorResponse(Response<Account> response) {
-            if (response.code() == 401) {
-                // Unauthorized, show error message
-                showToast("Invalid credentials");
+        private void buildAlertMessageNoGps() {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                            Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
+        }
+
+        public boolean isMapsEnabled(){
+            final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+
+            if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                buildAlertMessageNoGps();
+                return false;
+            }
+            return true;
+        }
+
+        private void getLocationPermission() {
+            /*
+             * Request location permission, so that we can get the location of the
+             * device. The result of the permission request is handled by a callback,
+             * onRequestPermissionsResult.
+             */
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+//                getChatrooms();
             } else {
-                // Handle other error codes or display a generic error message
-                showToast("Error: " + response.message());
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         }
 
-        private void showToast(String message) {
-            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        public boolean isServicesOK(){
+            Log.d(TAG, "isServicesOK: checking google services version");
+
+            int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+
+            if(available == ConnectionResult.SUCCESS){
+                //everything is fine and the user can make map requests
+                Log.d(TAG, "isServicesOK: Google Play Services is working");
+                return true;
+            }
+            else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+                //an error occured but we can resolve it
+                Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+                Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+                dialog.show();
+            }else{
+                Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+            }
+            return false;
         }
 
-        private void moveToNextActivity() {
-            Intent move = new Intent(MainActivity.this, NextActivity.class); // Change NextActivity to your desired next activity
-            startActivity(move);
-        }
 
         private void moveToRegisterActivity() {
             Intent move = new Intent(MainActivity.this, RegisterActivity.class);
