@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent move = new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent move = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(move);
             }
         });
