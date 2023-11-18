@@ -332,6 +332,27 @@ router.post('/logout', (req, res) => {
     }
   });
 });
+
+// Router 8: Booking room
+router.post('/bookroom', async (req, res) => {
+  const { user_id, kos_id } = req.body;
+ 
+  try {
+   const query = `
+     INSERT INTO bookings (user_id, kos_id)
+     VALUES ($1, $2)
+   `;
+ 
+   const values = [user_id, kos_id];
+ 
+   await db.query(query, values);
+ 
+   res.status(200).send('Room booked successfully');
+  } catch (error) {
+   console.error('An error occurred while booking the room:', error);
+   res.status(500).json({ error: 'An error occurred while processing the request' });
+  }
+ });
  
 app.use('/', router);
 app.listen(process.env.PORT || 3001, () => {
