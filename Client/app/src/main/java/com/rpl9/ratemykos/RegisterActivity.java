@@ -36,7 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.registerUsername);
         passwordText = findViewById(R.id.registerPassword);
         regButton = findViewById(R.id.registerButton);
-        reg = findViewById(R.id.signupTextLogin);
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,13 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = usernameText.getText().toString();
                 String password = passwordText.getText().toString();
                 register(email, username, password);
-            }
-        });
-        reg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent move = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(move);
             }
         });
     }

@@ -12,11 +12,15 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/List"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="List" />
+    <Button
         android:id="@+id/mapButton"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="MAP" />
-
     <Button
         android:id="@+id/loginMain"
         android:layout_width="80dp"

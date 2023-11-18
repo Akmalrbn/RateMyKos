@@ -14,6 +14,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "node-notifier": "^10.0.1",
+    "node-on-android": "^0.0.2",
     "pg": "^8.11.3"
   }
 }

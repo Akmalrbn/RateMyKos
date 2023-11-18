@@ -39,7 +39,7 @@ import retrofit2.Response;
     public class MainActivity extends AppCompatActivity {
         BaseApiService mApiService;
         EditText identifierText, passwordText;
-        Button login, map;
+        Button login, map, listbutton;
         TextView signUpText;
         Context mContext;
         private boolean mLocationPermissionGranted = false;
@@ -58,7 +58,7 @@ import retrofit2.Response;
                 }
             }
             login = findViewById(R.id.loginMain);
-
+            listbutton = findViewById(R.id.List);
             signUpText = findViewById(R.id.signupText);
             signUpText.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,6 +72,13 @@ import retrofit2.Response;
                 @Override
                 public void onClick(View view) {
                     Intent move = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(move);
+                }
+            });
+            listbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent move = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(move);
                 }
             });

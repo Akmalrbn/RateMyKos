@@ -1,6 +1,7 @@
 package com.rpl9.ratemykos.request;
 
 import com.rpl9.ratemykos.model.Account;
+import com.rpl9.ratemykos.model.Kos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +16,37 @@ import retrofit2.http.Query;
 
 public interface BaseApiService {
 
+//    @FormUrlEncoded
+//    @POST("/login")
+//    Call<Account> login(
+//            @Field("identifier") String identifier,
+//            @Field("password") String password
+//    );
+
     @FormUrlEncoded
-    @POST("/login")
+    @POST("login")
     Call<Account> login(
             @Field("identifier") String identifier,
             @Field("password") String password
     );
 
     @FormUrlEncoded
-    @POST("/register")
+    @POST("register")
     Call<Account> register(
             @Field("email") String email,
             @Field("username") String username,
             @Field("password") String password
     );
+//    @FormUrlEncoded
+    @GET("getallkos")
+    Call<List<Kos>> getall();
+
+//    @GET("getallkos")
+//    Call<List<Kos>> getAllKos(
+//          @Query("page") int page,
+//          @Query("pageSize") int pageSize
+//    );
+
 }
 
 //    @GET("account/{id}")

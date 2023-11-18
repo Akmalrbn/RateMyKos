@@ -48,7 +48,7 @@ app.use(
   })
 );
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://10.0.2.2:3000',
   credentials: true
 }));
 var temp;
@@ -371,6 +371,7 @@ router.post('/bookroom', async (req, res) => {
  
  
 app.use('/', router);
-app.listen(process.env.PORT || 3001, () => {
-    console.log(`App Started on PORT ${process.env.PORT || 3001}`);
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`App Started on PORT ${process.env.PORT || 3000}`);
 });
+
