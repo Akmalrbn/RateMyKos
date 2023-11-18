@@ -39,3 +39,9 @@ CREATE TABLE comments(
 );
 SELECT * FROM comments;
 
+CREATE TABLE bookings (
+   booking_id SERIAL PRIMARY KEY,
+   user_id INT NOT NULL,
+   kos_id INT NOT NULL,
+   booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
