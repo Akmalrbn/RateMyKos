@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Account> call, Throwable t) {
                 // Handle network or request failure
+                Log.e("Retrofit", "Request failed", t);
                 showToast("Network or request failure. Please try again.");
             }
         });
