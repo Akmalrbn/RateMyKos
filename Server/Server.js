@@ -180,18 +180,33 @@ app.delete('/deleteacc', async (req, res) => {//tambahin delete semua data user
     });
   });
 
-router.get('/getkos', async (req, res) => {
-  const { name } = req.body;
+  router.get('/getkos', async (req, res) => {
+    const { name } = req.body;
     try {
-      const query = `SELECT * FROM kos WHERE name = '${temp.name}';`;
-      const result = await db.query(query);
-      res.json(result.rows[0])
-      console.log(result.rows[0]);
+     const query = `SELECT * FROM kos WHERE name = $1;`;
+     const values = [name];
+     const result = await db.query(query, values);
+     res.json(result.rows[0])
+     console.log(result.rows[0]);
     } catch (error) {
-      console.error('Error retrieving user:', error);
+     console.error('Error retrieving user:', error);
+     return res.status(500).json({ error: 'Internal server error' });
+    }
+   });
+
+   router.get('/getallkos', async (req, res) => {
+    try {
+      const query = `SELECT * FROM kos;`;
+      const result = await db.query(query);
+      res.json(result.rows)
+      console.log(result.rows);
+    } catch (error) {
+      console.error('Error retrieving boarding houses:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
-});
+   });
+   
+   
 
 router.post('/addcomment', async (req, res) => {
   const { kos_id, user_id, comment} = req.body; // Get the kos ID, user ID, and comment from the request body
@@ -353,6 +368,7 @@ router.post('/bookroom', async (req, res) => {
    res.status(500).json({ error: 'An error occurred while processing the request' });
   }
  });
+ 
  
 app.use('/', router);
 app.listen(process.env.PORT || 3001, () => {
