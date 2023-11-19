@@ -25,9 +25,9 @@ public class KosAdapter extends ArrayAdapter<Kos> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.itemlist, parent, false);
         }
         TextView name = (TextView) convertView.findViewById(R.id.itemList);
-        TextView price = convertView.findViewById(R.id.listPrice);
+        TextView location = convertView.findViewById(R.id.listLocation);
         name.setText(kos.name);
-        price.setText("Rp. ");
+        location.setText(kos.location);
         return convertView;
     }
 }
