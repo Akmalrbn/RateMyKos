@@ -148,18 +148,18 @@ import retrofit2.Response;
         }
 
         public boolean isServicesOK(){
-            Log.d(TAG, "isServicesOK: checking google services version");
+            Log.d("MAPS", "isServicesOK: checking google services version");
 
             int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
 
             if(available == ConnectionResult.SUCCESS){
                 //everything is fine and the user can make map requests
-                Log.d(TAG, "isServicesOK: Google Play Services is working");
+                Log.d("MAPS", "isServicesOK: Google Play Services is working");
                 return true;
             }
             else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
                 //an error occured but we can resolve it
-                Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+                Log.d("MAPS", "isServicesOK: an error occured but we can fix it");
                 Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
                 dialog.show();
             }else{
