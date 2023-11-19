@@ -10,13 +10,15 @@
         android:icon="@drawable/ic_baseline_person_24"
         android:title="Person"
         app:showAsAction="collapseActionView|always"/>
-<!--    <item android:id="@+id/add_box"-->
-<!--        android:icon="@drawable/ic_baseline_add_box_24"-->
-<!--        android:title="Add Box"-->
-<!--        app:showAsAction="collapseActionView|always" />-->
-    <item
-        android:id="@+id/balance_menu"
-        android:title=""
+    <item android:id="@+id/add_box"
+        android:icon="@drawable/ic_baseline_add_box_24"
+        android:title="Add Box"
         app:showAsAction="collapseActionView|always" />
+
+<!--    <item-->
+<!--        android:id="@+id/balance_menu"-->
+<!--        android:title=""-->
+<!--        app:showAsAction="collapseActionView|always" />-->
+
 
 </menu>

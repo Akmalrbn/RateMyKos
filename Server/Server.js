@@ -160,25 +160,35 @@ app.delete('/deleteacc', async (req, res) => {//tambahin delete semua data user
 
 
   router.post('/addkos', (req, res) => {
-    const { name, location, description } = req.body;
+    const { name, location, latitude, longitude, description, facilities } = req.body;
     temp = req.session;
     temp.name = name;
     temp.location = location;
+    temp.latitude = latitude;
+    temp.longitude = longitude;
     temp.description = description;
+    temp.facilities = facilities;
     console.log(req.body);
-   
-    // Melakukan registrasi user baru ke dalam database
-    const query = `INSERT INTO kos (name, location, description) VALUES ('${temp.name}', '${temp.location}', '${temp.description}');`;
+
+    // Construct the SQL query with or without the facilities field
+    let query;
+    if (temp.facilities !== null && temp.facilities !== undefined) {
+        query = `INSERT INTO kos (name, location, latitude, longitude, description, facilities) VALUES ('${temp.name}', '${temp.location}', '${temp.latitude}', '${temp.longitude}', '${temp.description}', '{${temp.facilities}}');`;
+    } else {
+        query = `INSERT INTO kos (name, location, latitude, longitude, description) VALUES ('${temp.name}', '${temp.location}', '${temp.latitude}', '${temp.longitude}', '${temp.description}');`;
+    }
+
+    // Execute the query
     db.query(query, (err, results) => {
-      if (err) {
-        console.log(err);
-        notifier.notify("Register Gagal");
-        return;
-      }
-      res.send(`kos: ${temp.name}, pada lokasi: ${temp.location} berhasil terdaftar`);
-      res.end();
+        if (err) {
+            console.log(err);
+            notifier.notify("Register Gagal");
+            return;
+        }
+        res.send(`kos: ${temp.name}, pada lokasi: ${temp.location} berhasil terdaftar`);
+        res.end();
     });
-  });
+});
 
   router.get('/getkos', async (req, res) => {
     const { name } = req.body;
@@ -194,17 +204,38 @@ app.delete('/deleteacc', async (req, res) => {//tambahin delete semua data user
     }
    });
 
-   router.get('/getallkos', async (req, res) => {
+  //  router.get('/getallkos', async (req, res) => {
+  //   try {
+  //     const query = `SELECT * FROM kos;`;
+  //     const result = await db.query(query);
+  //     res.json(result.rows)
+  //     console.log(result.rows);
+  //   } catch (error) {
+  //     console.error('Error retrieving boarding houses:', error);
+  //     return res.status(500).json({ error: 'Internal server error' });
+  //   }
+  //  });
+  
+router.get('/getallkos', async (req, res) => {
     try {
-      const query = `SELECT * FROM kos;`;
-      const result = await db.query(query);
-      res.json(result.rows)
-      console.log(result.rows);
+        const query = `SELECT * FROM kos;`;
+        const result = await db.query(query);
+
+        // Map facilities to an array or set it to an empty array if it's null
+        const kosList = result.rows.map((kos) => {
+            return {
+                ...kos,
+                facilities: kos.facilities ? JSON.parse(kos.facilities) : [],
+            };
+        });
+
+        res.json(kosList);
+        console.log(kosList);
     } catch (error) {
-      console.error('Error retrieving boarding houses:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+        console.error('Error retrieving boarding houses:', error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
-   });
+});
    
    
 
@@ -371,7 +402,7 @@ router.post('/bookroom', async (req, res) => {
  
  
 app.use('/', router);
-app.listen(process.env.PORT || 3001, () => {
-    console.log(`App Started on PORT ${process.env.PORT || 3001}`);
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`App Started on PORT ${process.env.PORT || 3000}`);
 });
 

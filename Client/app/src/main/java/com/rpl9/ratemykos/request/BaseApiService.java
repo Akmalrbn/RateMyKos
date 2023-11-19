@@ -1,6 +1,7 @@
 package com.rpl9.ratemykos.request;
 
 import com.rpl9.ratemykos.model.Account;
+import com.rpl9.ratemykos.model.Facility;
 import com.rpl9.ratemykos.model.Kos;
 
 import java.util.ArrayList;
@@ -41,6 +42,16 @@ public interface BaseApiService {
     @GET("getallkos")
     Call<List<Kos>> getall();
 
+    @FormUrlEncoded
+    @POST("addkos")
+    Call<Kos> addkos(
+            @Field("name") String name,
+            @Field("location") String location,
+            @Field("latitude") double latitude,
+            @Field("longitude") double longitude,
+            @Field("description") String description
+//            @Field("facilities") ArrayList<Facility> facilities
+    );
 //    @GET("getallkos")
 //    Call<List<Kos>> getAllKos(
 //          @Query("page") int page,

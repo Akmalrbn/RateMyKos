@@ -5,10 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Group;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +26,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.rpl9.ratemykos.model.Account;
 import com.rpl9.ratemykos.model.Kos;
 import com.rpl9.ratemykos.request.BaseApiService;
@@ -33,8 +45,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity {
-    MenuItem balance;
+public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
+    MenuItem addKos;
     BaseApiService mApiService;
     Context mContext;
     public static ArrayList<Kos> arrayOfKos = new ArrayList<Kos>();
@@ -43,6 +55,10 @@ public class HomeActivity extends AppCompatActivity {
     int pageSize = 0;
     public static Account accLoggedIn;
     public static Kos kosView;
+    private GoogleMap mMap;
+    private MapFragment mapFragment;
+    private boolean mapVisible = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +66,11 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         mApiService = UtilsApi.getApiService();
         mContext = this;
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapHome);
+        mapFragment.getMapAsync(this);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Button next = findViewById(R.id.nextButton);
         Button prev = findViewById(R.id.prevButton);
         Button go = findViewById(R.id.goButton);
@@ -72,6 +93,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 kosView = (Kos) (listView.getItemAtPosition(position));
+                Log.d("Listkos", "Tes Kos" + listView.getItemAtPosition(position));
                 System.out.println(listView.getItemAtPosition(position));
                 Intent move = new Intent(HomeActivity.this, KosDetailActivity.class);
                 startActivity(move);
@@ -115,6 +137,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+
 //        setCity.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -146,8 +169,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        balance = menu.findItem(R.id.balance_menu);
-        balance.setTitle("Rp. " );
+        addKos = menu.findItem(R.id.add_box);
         SearchView search = (SearchView) menu.findItem(R.id.search_button).getActionView();
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -181,9 +203,12 @@ public class HomeActivity extends AppCompatActivity {
             Intent move = new Intent(HomeActivity.this, UserActivity.class);
             startActivity(move);
         }
+        if(item.getItemId() == R.id.add_box){
+            Intent move = new Intent(HomeActivity.this, CreateKosActivity.class);
+            startActivity(move);
+        }
         return super.onOptionsItemSelected(item);
     }
-
     /**
      * Mendapatkan 8 room sesuai parameter page yang akan ditampilkan pada listview
      * @param page
@@ -228,5 +253,21 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         return null;
+    }
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+        LatLng UI = new LatLng(-6.3606, 106.8272);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UI, 15));
+        mMap.addMarker(new MarkerOptions().position(UI).title("Universitas Indonesia"));
+
+        // Iterate through the list of Kos and add a marker for each one
+        for (Kos kos : KosList) {
+            LatLng kosLocation = new LatLng(kos.latitu, kos.longitu);
+            mMap.addMarker(new MarkerOptions().position(kosLocation).title(kos.name));
+        }
+
+
+
     }
 }
