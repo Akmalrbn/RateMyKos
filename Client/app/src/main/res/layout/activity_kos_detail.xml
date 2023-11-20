@@ -61,17 +61,17 @@
         app:layout_constraintTop_toBottomOf="@+id/LinearDetailName">
 
         <TextView
-            android:id="@+id/detailBed"
+            android:id="@+id/detailLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="Bed Type"
+            android:text="Location"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="126dp" />
 
         <TextView
-            android:id="@+id/detailBedText"
+            android:id="@+id/detailLocationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="76dp"

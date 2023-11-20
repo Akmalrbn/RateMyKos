@@ -42,7 +42,7 @@ public class CreateKosActivity extends AppCompatActivity {
     private double lati, longi;
     BaseApiService mApiService;
     Context mContext;
-//    ArrayList<Facility> facilities = new ArrayList<Facility>();
+    ArrayList<Facility> facilities = new ArrayList<Facility>();
 
     private final ActivityResultLauncher<Intent> mapLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -72,21 +72,21 @@ public class CreateKosActivity extends AppCompatActivity {
         CreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (WiFi.isChecked()){
-//                    facilities.add(Facility.WiFi);
-//                }
-//                if (AC.isChecked()){
-//                    facilities.add(Facility.AC);
-//                }
-//                if (Bathroom.isChecked()){
-//                    facilities.add(Facility.Bathroom);
-//                }
-//                if (Refrigerator.isChecked()){
-//                    facilities.add(Facility.Refrigerator);
-//                }
-//                if (Kitchen.isChecked()){
-//                    facilities.add(Facility.Kitchen);
-//                }
+                if (WiFi.isChecked()){
+                    facilities.add(Facility.WiFi);
+                }
+                if (AC.isChecked()){
+                    facilities.add(Facility.AC);
+                }
+                if (Bathroom.isChecked()){
+                    facilities.add(Facility.Bathroom);
+                }
+                if (Refrigerator.isChecked()){
+                    facilities.add(Facility.Refrigerator);
+                }
+                if (Kitchen.isChecked()){
+                    facilities.add(Facility.Kitchen);
+                }
                 name = KosName.getText().toString();
                 location = KosLocation.getText().toString();
                 description = KosDescription.getText().toString();
@@ -117,8 +117,32 @@ public class CreateKosActivity extends AppCompatActivity {
             }
         }
     }
+//    private void createKos() {
+//        Call<Kos> call = mApiService.addkosnofacilities(name, location, lati, longi, description);
+//        call.enqueue(new Callback<Kos>() {
+//            @Override
+//            public void onResponse(Call<Kos> call, Response<Kos> response) {
+//                if (response.isSuccessful()) {
+//                    Intent move = new Intent(CreateKosActivity.this, HomeActivity.class);
+//                    startActivity(move);
+//                } else {
+//                    // Handle the error response, e.g., display an error message
+//                    handleErrorResponse(response);
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<Kos> call, Throwable t) {
+//                // Handle network or request failure
+//                Log.e("CreateKos", "Request failed", t);
+//                showToast("Network or request failure. Please try again.");
+//                t.printStackTrace();
+//
+//            }
+//        });
+//    }
+
     private void createKos() {
-        Call<Kos> call = mApiService.addkos(name, location, lati, longi, description);
+        Call<Kos> call = mApiService.addkos(name, location, lati, longi, description, facilities);
         call.enqueue(new Callback<Kos>() {
             @Override
             public void onResponse(Call<Kos> call, Response<Kos> response) {
@@ -135,9 +159,11 @@ public class CreateKosActivity extends AppCompatActivity {
                 // Handle network or request failure
                 Log.e("CreateKos", "Request failed", t);
                 showToast("Network or request failure. Please try again.");
+                t.printStackTrace();
             }
         });
     }
+
     private void handleErrorResponse(Response<Kos> response) {
         if (response.code() == 401) {
             // Unauthorized, show error message
@@ -150,5 +176,4 @@ public class CreateKosActivity extends AppCompatActivity {
     private void showToast(String message) {
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
-
 }

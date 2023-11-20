@@ -23,7 +23,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker marker;
     private Button saveButton;
     private LatLng currentMarkerPosition;
-    public static double latitude, longitude;
+    public static double latitu, longitu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +88,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 private void onSaveButtonClick() {
     if (currentMarkerPosition != null) {
         // Save latitude and longitude to global variables
-        latitude = currentMarkerPosition.latitude;
-        longitude = currentMarkerPosition.longitude;
+        latitu = currentMarkerPosition.latitude;
+        longitu = currentMarkerPosition.longitude;
 
         // Create an Intent to send back the result
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("SELECTED_LATITUDE", latitude);
-        resultIntent.putExtra("SELECTED_LONGITUDE", longitude);
+        resultIntent.putExtra("SELECTED_LATITUDE", latitu);
+        resultIntent.putExtra("SELECTED_LONGITUDE", longitu);
 
         setResult(RESULT_OK, resultIntent);
         finish(); // Close MapsActivity
