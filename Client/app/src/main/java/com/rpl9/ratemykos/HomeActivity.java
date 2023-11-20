@@ -123,6 +123,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View view) {
                 pageSize = Integer.parseInt(page.getText().toString())-1;
                 requestRoom(pageSize);
+                resetMap();
             }
         });
         filter.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +222,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onResponse(Call<List<Kos>> call, Response<List<Kos>> response) {
                 arrayOfKos.clear();
                 arrayOfKos.addAll(response.body());
+                resetMap();
+                Log.d("HASIL", response.body().toString());
                 System.out.println(arrayOfKos.toString());
                 adapter.notifyDataSetChanged();
             }
@@ -245,6 +248,11 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(response.isSuccessful()) {
                     KosList.clear();
                     KosList.addAll(response.body());
+                    resetMap();
+                    Log.d("HASIL2", response.body().toString());
+                    for (Kos kos : KosList) {
+                        System.out.println(kos.name + kos.facilities);
+                    }
                 }
             }
             @Override
@@ -257,17 +265,44 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        getAll();
+        requestRoom(5);
         LatLng UI = new LatLng(-6.3606, 106.8272);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UI, 15));
         mMap.addMarker(new MarkerOptions().position(UI).title("Universitas Indonesia"));
-
-        // Iterate through the list of Kos and add a marker for each one
-        for (Kos kos : KosList) {
-            LatLng kosLocation = new LatLng(kos.latitu, kos.longitu);
-            mMap.addMarker(new MarkerOptions().position(kosLocation).title(kos.name));
+        if (!arrayOfKos.isEmpty()) {
+            // Move the map-related code inside onResponse to ensure data is available
+            // Iterate through the list of Kos and add a marker for each one
+            for (Kos kos : arrayOfKos) {
+                LatLng kosLocation = new LatLng(kos.latitude, kos.longitude);
+                mMap.addMarker(new MarkerOptions().position(kosLocation).title(kos.name));
+            }
+        } else {
+            // Handle the case where arrayOfKos is empty (no data available yet)
+            Toast.makeText(mContext, "No data available for map markers", Toast.LENGTH_SHORT).show();
         }
-
-
+        // Iterate through the list of Kos and add a marker for each one
+//        LatLng testLocation = new LatLng(arrayOfKos.get(0).latitute, arrayOfKos.get(0).latitute);
+//        mMap.addMarker(new MarkerOptions().position(testLocation).title("Test Kos"));
+    }
+    private void resetMap(){
+        if (mMap != null){
+            mMap.clear();
+        }
+        LatLng UP = new LatLng(-6.3606, 106.8272);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UP, 15));
+        mMap.addMarker(new MarkerOptions().position(UP).title("Universitas Pancasila"));
+        if (!arrayOfKos.isEmpty()) {
+            // Move the map-related code inside onResponse to ensure data is available
+            // Iterate through the list of Kos and add a marker for each one
+            for (Kos kos : arrayOfKos) {
+                LatLng kosLocation = new LatLng(kos.latitude, kos.longitude);
+                mMap.addMarker(new MarkerOptions().position(kosLocation).title(kos.name));
+            }
+        } else {
+            // Handle the case where arrayOfKos is empty (no data available yet)
+            Toast.makeText(mContext, "No data available for map markers", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

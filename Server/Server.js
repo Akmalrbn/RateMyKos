@@ -159,83 +159,184 @@ app.delete('/deleteacc', async (req, res) => {//tambahin delete semua data user
   });
 
 
-  router.post('/addkos', (req, res) => {
-    const { name, location, latitude, longitude, description, facilities } = req.body;
-    temp = req.session;
-    temp.name = name;
-    temp.location = location;
-    temp.latitude = latitude;
-    temp.longitude = longitude;
-    temp.description = description;
-    temp.facilities = facilities;
-    console.log(req.body);
+//   router.post('/addkos', (req, res) => {
+//     const { name, location, latitude, longitude, description, facilities } = req.body;
+//     temp = req.session;
+//     temp.name = name;
+//     temp.location = location;
+//     temp.latitude = latitude;
+//     temp.longitude = longitude;
+//     temp.description = description;
+//     temp.facilities = facilities;
+//     console.log(req.body);
 
-    // Construct the SQL query with or without the facilities field
-    let query;
-    if (temp.facilities !== null && temp.facilities !== undefined) {
-        query = `INSERT INTO kos (name, location, latitude, longitude, description, facilities) VALUES ('${temp.name}', '${temp.location}', '${temp.latitude}', '${temp.longitude}', '${temp.description}', '{${temp.facilities}}');`;
-    } else {
-        query = `INSERT INTO kos (name, location, latitude, longitude, description) VALUES ('${temp.name}', '${temp.location}', '${temp.latitude}', '${temp.longitude}', '${temp.description}');`;
-    }
+//     // Construct the SQL query with or without the facilities field
+//     let query;
+//     let params;
+//     if (temp.facilities !== null && temp.facilities !== undefined) {
+//         query = `INSERT INTO kos (name, location, latitude, longitude, description, facilities) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
+//         params = [temp.name, temp.location, temp.latitude, temp.longitude, temp.description, temp.facilities];
+//     } else {
+//         query = `INSERT INTO kos (name, location, latitude, longitude, description) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+//         params = [temp.name, temp.location, temp.latitude, temp.longitude, temp.description];
+//     }
 
-    // Execute the query
-    db.query(query, (err, results) => {
-        if (err) {
-            console.log(err);
-            notifier.notify("Register Gagal");
-            return;
-        }
-        res.send(`kos: ${temp.name}, pada lokasi: ${temp.location} berhasil terdaftar`);
-        res.end();
-    });
+//     // Execute the query
+//     db.query(query, params, (err, results) => {
+//         if (err) {
+//             console.log(err);
+//             notifier.notify("Register Gagal");
+//             res.status(500).json({ error: 'Failed to register kos' });
+//             return;
+//         }
+
+//         const insertedKos = results.rows[0];
+//         res.json({ message: `kos: ${insertedKos.name}, pada lokasi: ${insertedKos.location} berhasil terdaftar`, insertedKos });
+//     });
+// });
+
+router.post('/addkos', (req, res) => {
+  const { name, location, latitude, longitude, description, facilities } = req.body;
+  const query = `
+      INSERT INTO kos (name, location, latitude, longitude, description, facilities)
+      VALUES ($1, $2, $3, $4, $5, $6::facility[])
+      RETURNING *;
+  `;
+
+  const values = [name, location, latitude, longitude, description, facilities];
+
+  db.query(query, values, (err, result) => {
+      if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Failed to register kos' });
+          return;
+      }
+
+      const insertedKos = result.rows[0];
+      res.json({ message: `kos: ${insertedKos.name}, pada lokasi: ${insertedKos.location} berhasil terdaftar`, insertedKos });
+  });
 });
 
-  router.get('/getkos', async (req, res) => {
-    const { name } = req.body;
-    try {
-     const query = `SELECT * FROM kos WHERE name = $1;`;
-     const values = [name];
-     const result = await db.query(query, values);
-     res.json(result.rows[0])
-     console.log(result.rows[0]);
-    } catch (error) {
-     console.error('Error retrieving user:', error);
-     return res.status(500).json({ error: 'Internal server error' });
-    }
-   });
 
-  //  router.get('/getallkos', async (req, res) => {
-  //   try {
-  //     const query = `SELECT * FROM kos;`;
-  //     const result = await db.query(query);
-  //     res.json(result.rows)
-  //     console.log(result.rows);
-  //   } catch (error) {
-  //     console.error('Error retrieving boarding houses:', error);
-  //     return res.status(500).json({ error: 'Internal server error' });
-  //   }
-  //  });
+router.post('/addkosnofacilities', (req, res) => {
+  const { name, location, latitude, longitude, description } = req.body;
+  temp = req.session;
+  temp.name = name;
+  temp.location = location;
+  temp.latitude = latitude;
+  temp.longitude = longitude;
+  temp.description = description;
+  console.log(req.body);
   
-router.get('/getallkos', async (req, res) => {
-    try {
-        const query = `SELECT * FROM kos;`;
-        const result = await db.query(query);
+  const query = `INSERT INTO kos (name, location, latitude, longitude, description) VALUES ('${temp.name}', '${temp.location}', '${temp.latitude}', '${temp.longitude}', '${temp.description}');`;
 
-        // Map facilities to an array or set it to an empty array if it's null
-        const kosList = result.rows.map((kos) => {
-            return {
-                ...kos,
-                facilities: kos.facilities ? JSON.parse(kos.facilities) : [],
-            };
-        });
-
-        res.json(kosList);
-        console.log(kosList);
-    } catch (error) {
-        console.error('Error retrieving boarding houses:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
+  // Execute the query
+  db.query(query, (err, results) => {
+      if (err) {
+          console.log(err);
+          notifier.notify("Register Gagal");
+          return;
+      }
+      res.json({
+        message: `kos: ${temp.name}, pada lokasi: ${temp.location} berhasil terdaftar`
+      });
+      res.end();
+  });
 });
+
+router.get('/getkos', async (req, res) => {
+  const { name } = req.body;
+  try {
+    const query = `SELECT * FROM kos WHERE name = $1;`;
+    const values = [name];
+    const result = await db.query(query, values);
+    res.json(result.rows[0])
+    console.log(result.rows[0]);
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+  });
+
+  // router.get('/getallkos', async (req, res) => {
+  // try {
+  //   const query = `SELECT * FROM kos;`;
+  //   const result = await db.query(query);
+  //   res.json(result.rows)
+  //   console.log(result.rows);
+  // } catch (error) {
+  //   console.error('Error retrieving boarding houses:', error);
+  //   return res.status(500).json({ error: 'Internal server error' });
+  // }
+  // });
+  
+  router.get('/getallkos', async (req, res) => {
+    // Assuming facilities is an array of strings in your database
+    const query = `SELECT * FROM kos;`;
+    const result = await db.query(query);
+
+    const kosList = result.rows.map((kos) => {
+        return {
+            ...kos,
+            facilities: kos.facilities ? kos.facilities.substring(1, kos.facilities.length - 1).split(',') : [],
+        };
+    });
+    res.json(kosList);
+
+  });
+
+// router.get('/getallkos', async (req, res) => {
+//     try {
+//         const query = `SELECT * FROM kos;`;
+//         const result = await db.query(query);
+
+//         // Map facilities to an array or set it to an empty array if it's null
+//         const kosList = result.rows.map((kos) => {
+//             try {
+//                 return {
+//                     ...kos,
+//                     facilities: kos.facilities !== null ? JSON.parse(kos.facilities) : [],
+//                 };
+//             } catch (parseError) {
+//                 console.error('Error parsing facilities JSON:', parseError);
+//                 console.log('Facilities JSON string:', kos.facilities);
+//                 return {
+//                     ...kos,
+//                     facilities: [],
+//                 };
+//             }
+//         });
+
+//         res.json(kosList);
+//         console.log(kosList);
+//     } catch (error) {
+//         console.error('Error retrieving boarding houses:', error);
+//         return res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
+
+
+
+// router.get('/getallkos', async (req, res) => {
+//     try {
+//         const query = `SELECT * FROM kos;`;
+//         const result = await db.query(query);
+
+//         // Map facilities to an array or set it to an empty array if it's null
+//         const kosList = result.rows.map((kos) => {
+//             return {
+//                 ...kos,
+//                 facilities: kos.facilities ? JSON.parse(kos.facilities) : [],
+//             };
+//         });
+
+//         res.json(kosList);
+//         console.log(kosList);
+//     } catch (error) {
+//         console.error('Error retrieving boarding houses:', error);
+//         return res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
    
    
 

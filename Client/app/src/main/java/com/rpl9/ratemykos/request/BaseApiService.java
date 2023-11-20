@@ -43,14 +43,24 @@ public interface BaseApiService {
     Call<List<Kos>> getall();
 
     @FormUrlEncoded
+    @POST("addkosnofacilities")
+    Call<Kos> addkosnofacilities(
+            @Field("name") String name,
+            @Field("location") String location,
+            @Field("latitude") double latitude,
+            @Field("longitude") double longitude,
+            @Field("description") String description
+    );
+
+    @FormUrlEncoded
     @POST("addkos")
     Call<Kos> addkos(
             @Field("name") String name,
             @Field("location") String location,
             @Field("latitude") double latitude,
             @Field("longitude") double longitude,
-            @Field("description") String description
-//            @Field("facilities") ArrayList<Facility> facilities
+            @Field("description") String description,
+            @Field("facilities") ArrayList<Facility> facilities
     );
 //    @GET("getallkos")
 //    Call<List<Kos>> getAllKos(
