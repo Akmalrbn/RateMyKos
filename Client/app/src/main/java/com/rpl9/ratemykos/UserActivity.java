@@ -1,5 +1,7 @@
 package com.rpl9.ratemykos;
 
+import static com.rpl9.ratemykos.LoginActivity.account;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,10 @@ public class UserActivity extends AppCompatActivity {
         TextView type = findViewById(R.id.Type);
         TextView chooseType = findViewById(R.id.Choose_type);
         Button saveChanges = findViewById(R.id.save_changes);
+        name.setText(account.getUsername());
+        username.setText(account.getUsername());
+        email.setText(account.getEmail());
+        chooseType.setText(account.getUser_type().toString());
 
         // When the Edit Profile button is clicked, the fields become editable
         editProfile.setOnClickListener(new View.OnClickListener() {
