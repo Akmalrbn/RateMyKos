@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView reg;
     Button loginButton;
     Context mContext;
+    public static Account account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
                 if (response.isSuccessful()) {
-                    Account account = response.body();
-                    String email = account.getEmail();
-                    String username = account.getUsername();
+                    account = response.body();
                     // Handle a successful login response, e.g., save the token and user information
                     Intent move = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(move);
