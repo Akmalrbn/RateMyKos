@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     account = response.body();
                     // Handle a successful login response, e.g., save the token and user information
-                    Intent move = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent move = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(move);
                 } else {
                     // Handle the error response, e.g., display an error message
