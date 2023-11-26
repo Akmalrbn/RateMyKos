@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rpl9.ratemykos.model.Account;
 import com.rpl9.ratemykos.model.Kos;
+import com.rpl9.ratemykos.model.Kos_type;
 import com.rpl9.ratemykos.request.BaseApiService;
 import com.rpl9.ratemykos.request.UtilsApi;
 
@@ -76,14 +77,11 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         Button go = findViewById(R.id.goButton);
         EditText page = findViewById(R.id.page);
         TextView filter = findViewById(R.id.filterTitle);
-        TextView setCity = findViewById(R.id.setCityFilter);
-        TextView setBed = findViewById(R.id.setBedTypeFilter);
+        TextView setType = findViewById(R.id.setTypeFilter);
 
         Group groupFilter = findViewById(R.id.groupFilter);
-        Spinner citySpin = (Spinner) findViewById(R.id.CityFilterSpinner);
-        //citySpin.setAdapter((new ArrayAdapter<City>(this, android.R.layout.simple_spinner_dropdown_item, City.values())));
-        Spinner bedSpin = (Spinner) findViewById(R.id.BedTypeFilterSpinner);
-        //bedSpin.setAdapter((new ArrayAdapter<BedType>(this, android.R.layout.simple_spinner_dropdown_item, BedType.values())));
+        Spinner typeSpin = (Spinner) findViewById(R.id.TypeFilterSpinner);
+        typeSpin.setAdapter((new ArrayAdapter<Kos_type>(this, android.R.layout.simple_spinner_dropdown_item, Kos_type.values())));
         requestRoom(pageSize);
         getAll();
         adapter = new KosAdapter(this, arrayOfKos);
@@ -139,19 +137,19 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-//        setCity.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                City cityFil = City.valueOf(citySpin.getSelectedItem().toString());
-//                arrayOfRoom.clear();
-//                for (Room filter : KosList) {
-//                    if (filter.city == cityFil) {
-//                        arrayOfRoom.add(filter);
-//                    }
-//                }
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
+        setType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Kos_type typeFil = Kos_type.valueOf(typeSpin.getSelectedItem().toString());
+                arrayOfKos.clear();
+                for (Kos filter : KosList) {
+                    if (filter.kos_type == typeFil) {
+                        arrayOfKos.add(filter);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
 //        setBed.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {

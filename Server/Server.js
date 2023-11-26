@@ -22,6 +22,7 @@ const db = new Client({
         },
     password: 'qTu27CpWyMXh',
     port: 5432,
+    idleTimeoutMillis: 100000,
 })
 
 //Melakukan koneksi dan menunjukkan indikasi database terhubung
@@ -196,14 +197,14 @@ app.delete('/deleteacc', async (req, res) => {//tambahin delete semua data user
 // });
 
 router.post('/addkos', (req, res) => {
-  const { name, location, latitude, longitude, description, facilities } = req.body;
+  const { name, location, latitude, longitude, description, facilities, kos_type } = req.body;
   const query = `
-      INSERT INTO kos (name, location, latitude, longitude, description, facilities)
-      VALUES ($1, $2, $3, $4, $5, $6::facility[])
+      INSERT INTO kos (name, location, latitude, longitude, description, facilities, kos_type)
+      VALUES ($1, $2, $3, $4, $5, $6::facility[], $7)
       RETURNING *;
   `;
 
-  const values = [name, location, latitude, longitude, description, facilities];
+  const values = [name, location, latitude, longitude, description, facilities, kos_type];
 
   db.query(query, values, (err, result) => {
       if (err) {
@@ -285,65 +286,11 @@ router.get('/getkos', async (req, res) => {
 
   });
 
-// router.get('/getallkos', async (req, res) => {
-//     try {
-//         const query = `SELECT * FROM kos;`;
-//         const result = await db.query(query);
-
-//         // Map facilities to an array or set it to an empty array if it's null
-//         const kosList = result.rows.map((kos) => {
-//             try {
-//                 return {
-//                     ...kos,
-//                     facilities: kos.facilities !== null ? JSON.parse(kos.facilities) : [],
-//                 };
-//             } catch (parseError) {
-//                 console.error('Error parsing facilities JSON:', parseError);
-//                 console.log('Facilities JSON string:', kos.facilities);
-//                 return {
-//                     ...kos,
-//                     facilities: [],
-//                 };
-//             }
-//         });
-
-//         res.json(kosList);
-//         console.log(kosList);
-//     } catch (error) {
-//         console.error('Error retrieving boarding houses:', error);
-//         return res.status(500).json({ error: 'Internal server error' });
-//     }
-// });
-
-
-
-// router.get('/getallkos', async (req, res) => {
-//     try {
-//         const query = `SELECT * FROM kos;`;
-//         const result = await db.query(query);
-
-//         // Map facilities to an array or set it to an empty array if it's null
-//         const kosList = result.rows.map((kos) => {
-//             return {
-//                 ...kos,
-//                 facilities: kos.facilities ? JSON.parse(kos.facilities) : [],
-//             };
-//         });
-
-//         res.json(kosList);
-//         console.log(kosList);
-//     } catch (error) {
-//         console.error('Error retrieving boarding houses:', error);
-//         return res.status(500).json({ error: 'Internal server error' });
-//     }
-// });
    
-   
-
 router.post('/addcomment', async (req, res) => {
   const { kos_id, user_id, comment} = req.body; // Get the kos ID, user ID, and comment from the request body
   const query = {
-    text: 'INSERT INTO comments (user_id, kos_id, comment_text) VALUES ($1, $2, $3)',
+    text: 'INSERT INTO comments (user_id, kos_id, comment) VALUES ($1, $2, $3)',
     values: [user_id, kos_id, comment],
   };
 
@@ -358,11 +305,33 @@ router.post('/addcomment', async (req, res) => {
   });
 });
 
-router.post('/addreply', async (req, res) => {
-  const { movie_id, user_id, comment, reply_id} = req.body; // Get the movie ID, user ID, and comment from the request body
+router.get('/getcomment/:kos_id', async (req, res) => {
+  const { kos_id } = req.params; // Get the kos_id from the request parameters
   const query = {
-    text: 'INSERT INTO comments (comment, user_id, movie_id, reply_id) VALUES ($1, $2, $3, $4)',
-    values: [comment, user_id, movie_id, reply_id],
+    text: `SELECT c.comment_id, c.comment, c.user_id, c.reply_id, c.created_at, u.username
+            FROM comments AS c
+            JOIN users AS u ON c.user_id = u.user_id
+            WHERE kos_id = $1
+            ORDER BY created_at ASC;`,
+    values: [kos_id],
+  };
+
+  try {
+    const result = await db.query(query);
+    console.log('Comments retrieved successfully');
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error retrieving comments:', err);
+    res.status(500).json({ error: 'Error retrieving comments' });
+  }
+});
+
+
+router.post('/addreply', async (req, res) => {
+  const { kos_id, user_id, comment, reply_id} = req.body; // Get the movie ID, user ID, and comment from the request body
+  const query = {
+    text: 'INSERT INTO comments (comment, user_id, kos_id, reply_id) VALUES ($1, $2, $3, $4)',
+    values: [comment, user_id, kos_id, reply_id],
   };
 
   db.query(query, (err, result) => {
@@ -394,8 +363,8 @@ try {
 });
 
 
-router.get('/getreply/:user_id', async (req, res) => {
-  const { reply_id } = req.body;
+router.get('/getreply/:reply_id', async (req, res) => {
+  const { reply_id } = req.params;
   try {
     const query = `
     SELECT c.comment, c.user_id, u.username
@@ -408,7 +377,7 @@ router.get('/getreply/:user_id', async (req, res) => {
     res.json(comments); // Send the comments as a JSON response
  
   } catch (error) {
-    console.error('Error retrieving comments:', error);
+    console.error('Error retrieving replies:', error);
   }
 });
 

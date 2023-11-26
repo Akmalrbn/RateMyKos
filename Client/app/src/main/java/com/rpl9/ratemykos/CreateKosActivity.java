@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.rpl9.ratemykos.model.Account;
 import com.rpl9.ratemykos.model.Facility;
 import com.rpl9.ratemykos.model.Kos;
+import com.rpl9.ratemykos.model.Kos_type;
 import com.rpl9.ratemykos.request.BaseApiService;
 import com.rpl9.ratemykos.request.UtilsApi;
 
@@ -38,7 +41,7 @@ public class CreateKosActivity extends AppCompatActivity {
     private TextView KosLongitude;
     private Button MapsButton;
     private Button CreateButton;
-    private String name, location, description;
+    private String name, location, description, kos_type;
     private double lati, longi;
     BaseApiService mApiService;
     Context mContext;
@@ -67,7 +70,8 @@ public class CreateKosActivity extends AppCompatActivity {
         CheckBox Bathroom = findViewById(R.id.createBathroom);
         CheckBox Refrigerator = findViewById(R.id.createRefrigerator);
         CheckBox Kitchen = findViewById(R.id.createKitchen);
-
+        Spinner KosType = (Spinner) findViewById(R.id.createType);
+        KosType.setAdapter((new ArrayAdapter<Kos_type>(this, android.R.layout.simple_spinner_dropdown_item, Kos_type.values())));
         MapsButton.setOnClickListener(view -> onGoToMapButtonClick());
         CreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +94,7 @@ public class CreateKosActivity extends AppCompatActivity {
                 name = KosName.getText().toString();
                 location = KosLocation.getText().toString();
                 description = KosDescription.getText().toString();
+                kos_type = KosType.getSelectedItem().toString();
                 createKos();
             }
         });
@@ -142,7 +147,7 @@ public class CreateKosActivity extends AppCompatActivity {
 //    }
 
     private void createKos() {
-        Call<Kos> call = mApiService.addkos(name, location, lati, longi, description, facilities);
+        Call<Kos> call = mApiService.addkos(name, location, lati, longi, description, facilities, kos_type);
         call.enqueue(new Callback<Kos>() {
             @Override
             public void onResponse(Call<Kos> call, Response<Kos> response) {

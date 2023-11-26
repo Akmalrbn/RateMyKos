@@ -11,10 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="LinearCityFilter, LinearBedTypeFilter" />
+        app:constraint_referenced_ids="LinearTypeFilter" />
 
     <LinearLayout
-        android:id="@+id/LinearCityFilter"
+        android:id="@+id/LinearTypeFilter"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
@@ -25,19 +25,19 @@
         app:layout_constraintTop_toBottomOf="@+id/filterTitle">
 
         <TextView
-            android:id="@+id/CityFilter"
+            android:id="@+id/TypeFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="28dp"
-            android:text="City"
+            android:text="Type"
             android:textSize="20dp"
             app:layout_constraintEnd_toStartOf="@+id/nextButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/CityFilterSpinner"
+            android:id="@+id/TypeFilterSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="51dp"
@@ -46,7 +46,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/setCityFilter"
+            android:id="@+id/setTypeFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="90dp"
@@ -58,46 +58,46 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/LinearBedTypeFilter"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearCityFilter">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/LinearBedTypeFilter"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="35dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/LinearCityFilter">-->
 
-        <TextView
-            android:id="@+id/BedTypeFilter"
-            android:layout_width="93dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:ems="10"
-            android:text="Bed Type"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/goButton"
-            app:layout_constraintStart_toEndOf="@+id/nextButton"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <TextView-->
+<!--            android:id="@+id/BedTypeFilter"-->
+<!--            android:layout_width="93dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:ems="10"-->
+<!--            android:text="Bed Type"-->
+<!--            android:textSize="20dp"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/goButton"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/nextButton"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-        <Spinner
-            android:id="@+id/BedTypeFilterSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="GO" />
+<!--        <Spinner-->
+<!--            android:id="@+id/BedTypeFilterSpinner"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:text="GO" />-->
 
-        <TextView
-            android:id="@+id/setBedTypeFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:text="Set"
-            android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LinearFacilityFilter" />
+<!--        <TextView-->
+<!--            android:id="@+id/setBedTypeFilter"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="90dp"-->
+<!--            android:text="Set"-->
+<!--            android:textSize="15dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/LinearFacilityFilter" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/LinearLayout"
@@ -108,7 +108,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearBedTypeFilter">
+        app:layout_constraintTop_toBottomOf="@+id/LinearTypeFilter">
 
         <Button
             android:id="@+id/prevButton"

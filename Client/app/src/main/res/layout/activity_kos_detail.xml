@@ -1,257 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/img_1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".KosDetailActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <TextView
-        android:id="@+id/detailKosTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="151dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="151dp"
-        android:text="Kos Name"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/LinearDetailName"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailKosTitle">
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/detailKosTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="151dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="151dp"
+            android:text="Kos Name"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/LinearDetailBed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailKosTitle">
+
+            <TextView
+                android:id="@+id/detailLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:text="Address"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="126dp" />
+
+            <TextView
+                android:id="@+id/detailLocationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="76dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/detailBed"
+                tools:layout_editor_absoluteY="105dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearDetailPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LinearDetailSize">
+
+            <TextView
+                android:id="@+id/detailPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:text="Price"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="216dp" />
+
+            <TextView
+                android:id="@+id/detailPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="109dp"
+                android:ems="10"
+                android:textSize="20sp"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toEndOf="@+id/detailPrice"
+                tools:layout_editor_absoluteY="195dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/LinearKosType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LinearDetailRating">
+
+            <TextView
+                android:id="@+id/detailTypeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="0dp"
+                android:text="Tipe Kos"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/detailType"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="43dp"
+                android:layout_marginTop="0dp"
+                android:text="Tipe Kos"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearDetailRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LinearDetailPrice">
+
+            <TextView
+                android:id="@+id/detailRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:text="Rating"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="216dp" />
+
+            <TextView
+                android:id="@+id/detailRatingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="109dp"
+                android:ems="10"
+                android:textSize="20sp"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toEndOf="@+id/detailPrice"
+                tools:layout_editor_absoluteY="195dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearDetailSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LinearDetailBed">
+
+            <TextView
+                android:id="@+id/detailSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:text="Size"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="171dp" />
+
+            <TextView
+                android:id="@+id/detailSizeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="117dp"
+                android:ems="10"
+                android:textSize="20sp"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toEndOf="@+id/detailSize"
+                tools:layout_editor_absoluteY="150dp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/detailName"
+            android:id="@+id/detailFacility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="40dp"
+            android:text="Facility"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LinearDetailRating" />
+
+
+        <CheckBox
+            android:id="@+id/AC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="Name"
-            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:text="AC"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="81dp" />
+            app:layout_constraintTop_toBottomOf="@+id/detailFacility" />
 
-        <TextView
-            android:id="@+id/detailNameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:ems="10"
-            android:textSize="18sp"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toEndOf="@+id/detailName"
-            tools:layout_editor_absoluteY="57dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearDetailBed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearDetailName">
-
-        <TextView
-            android:id="@+id/detailLocation"
+        <CheckBox
+            android:id="@+id/Refrigerator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="Location"
-            android:textSize="18sp"
+            android:layout_marginTop="1dp"
+            android:text="Refrigerator"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="126dp" />
+            app:layout_constraintTop_toBottomOf="@+id/Wifi" />
 
-        <TextView
-            android:id="@+id/detailLocationText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="76dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/detailBed"
-            tools:layout_editor_absoluteY="105dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearDetailPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearDetailSize">
-
-        <TextView
-            android:id="@+id/detailPrice"
+        <CheckBox
+            android:id="@+id/Wifi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="Price"
-            android:textSize="18sp"
+            android:layout_marginTop="1dp"
+            android:text="Wifi"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="216dp" />
+            app:layout_constraintTop_toBottomOf="@+id/Kitchen" />
 
-        <TextView
-            android:id="@+id/detailPriceText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="109dp"
-            android:ems="10"
-            android:textSize="18sp"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toEndOf="@+id/detailPrice"
-            tools:layout_editor_absoluteY="195dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearDetailSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearDetailBed">
-
-        <TextView
-            android:id="@+id/detailSize"
+        <CheckBox
+            android:id="@+id/Bathroom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="Size"
-            android:textSize="18sp"
+            android:text="Bathroom"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="171dp" />
+            app:layout_constraintTop_toBottomOf="@+id/AC" />
 
-        <TextView
-            android:id="@+id/detailSizeText"
+        <CheckBox
+            android:id="@+id/Kitchen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="117dp"
-            android:ems="10"
+            android:layout_marginStart="50dp"
+            android:text="Kitchen"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Bathroom" />
+
+
+        <Button
+            android:id="@+id/bookButton"
+            android:layout_width="157dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="163dp"
+            android:backgroundTint="#f8deb5"
+            android:textColor="#000000"
+            android:text="Book"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.362"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Refrigerator" />
+
+
+        <TextView
+            android:id="@+id/detailForum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:text="Forum"
             android:textSize="18sp"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toEndOf="@+id/detailSize"
-            tools:layout_editor_absoluteY="150dp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/detailAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:text="Address"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearDetailPrice" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bookButton" />
 
 
-    <TextView
-        android:id="@+id/detailFacility"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="108dp"
-        android:text="Facility"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearDetailPrice" />
-
-    <TextView
-        android:id="@+id/detailAddText"
-        android:layout_width="275dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:textSize="18dp"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailAddress" />
-
-    <CheckBox
-        android:id="@+id/AC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="18dp"
-        android:text="AC"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailFacility" />
-
-    <CheckBox
-        android:id="@+id/Refrigerator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="1dp"
-        android:text="Refrigerator"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/Bathroom"
-        app:layout_constraintTop_toBottomOf="@+id/Wifi" />
-
-    <CheckBox
-        android:id="@+id/Wifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="60dp"
-        android:text="Wifi"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/AC"
-        app:layout_constraintTop_toBottomOf="@+id/detailAddText" />
-
-    <CheckBox
-        android:id="@+id/Bathroom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:text="Bathroom"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AC" />
-
-    <CheckBox
-        android:id="@+id/Kitchen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:text="Kitchen"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Bathroom" />
-
-    <Button
-        android:id="@+id/bookButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="163dp"
-        android:text="Book"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Refrigerator" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/commentRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/bookButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/commentRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailForum"
+            app:layout_constraintVertical_bias="1.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

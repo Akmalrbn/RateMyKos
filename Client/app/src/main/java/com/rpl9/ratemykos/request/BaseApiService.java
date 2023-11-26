@@ -1,6 +1,7 @@
 package com.rpl9.ratemykos.request;
 
 import com.rpl9.ratemykos.model.Account;
+import com.rpl9.ratemykos.model.Comment;
 import com.rpl9.ratemykos.model.Facility;
 import com.rpl9.ratemykos.model.Kos;
 
@@ -42,6 +43,16 @@ public interface BaseApiService {
     @GET("getallkos")
     Call<List<Kos>> getall();
 
+    @GET("getcomment/{kos_id}")
+    Call<List<Comment>> getcomment(
+            @Path("kos_id") int kos_id
+    );
+
+    @GET("getreply/{comment_id}")
+    Call<List<Comment>> getreply
+            (@Path("comment_id") int comment_id
+    );
+
     @FormUrlEncoded
     @POST("addkosnofacilities")
     Call<Kos> addkosnofacilities(
@@ -60,8 +71,11 @@ public interface BaseApiService {
             @Field("latitude") double latitude,
             @Field("longitude") double longitude,
             @Field("description") String description,
-            @Field("facilities") ArrayList<Facility> facilities
+            @Field("facilities") ArrayList<Facility> facilities,
+            @Field("kos_type") String kos_type
     );
+
+
 //    @GET("getallkos")
 //    Call<List<Kos>> getAllKos(
 //          @Query("page") int page,
