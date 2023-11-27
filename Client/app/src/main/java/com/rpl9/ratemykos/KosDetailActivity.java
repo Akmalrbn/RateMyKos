@@ -2,6 +2,7 @@ package com.rpl9.ratemykos;
 
 
 import static com.rpl9.ratemykos.HomeActivity.kosView;
+import static com.rpl9.ratemykos.LoginActivity.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.rpl9.ratemykos.model.Comment;
 import com.rpl9.ratemykos.model.Facility;
 import com.rpl9.ratemykos.model.Kos;
 import com.rpl9.ratemykos.model.Kos_type;
+import com.rpl9.ratemykos.model.averageRating;
 import com.rpl9.ratemykos.request.BaseApiService;
 import com.rpl9.ratemykos.request.UtilsApi;
 
@@ -46,7 +48,9 @@ public class KosDetailActivity extends AppCompatActivity {
     ForumAdapter adapter;
     public static List<Comment> commentList = new ArrayList<Comment>();
     public static List<Comment> organizedComments = new ArrayList<Comment>();
-
+    averageRating avgrating;
+    TextView rating;
+    int rate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +68,9 @@ public class KosDetailActivity extends AppCompatActivity {
 //        TextView size = findViewById(R.id.detailSizeText);
 //        TextView price = findViewById(R.id.detailPriceText);
         TextView address = findViewById(R.id.detailLocationText);
+        TextView ratingText = findViewById(R.id.detailSetRating);
+        Button setRating = findViewById(R.id.detailButtonRating);
+        rating = findViewById(R.id.detailRatingText);
         CheckBox WiFi = findViewById(R.id.Wifi);
         CheckBox AC = findViewById(R.id.AC);
         CheckBox Bathroom = findViewById(R.id.Bathroom);
@@ -73,6 +80,8 @@ public class KosDetailActivity extends AppCompatActivity {
         name.setText(kosView.name);
         address.setText(kosView.location);
         KosType.setText(kosView.kos_type.toString());
+
+        getrating();
         if (kosView.facilities != null) {
             if (kosView.facilities.contains(Facility.WiFi)) {
                 WiFi.setChecked(true);
@@ -99,6 +108,13 @@ public class KosDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent move = new Intent(KosDetailActivity.this, BookActivity.class);
                 startActivity(move);
+            }
+        });
+        setRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int rate = Integer.parseInt(ratingText.getText().toString());
+                addrating();
             }
         });
     }
@@ -151,5 +167,42 @@ public class KosDetailActivity extends AppCompatActivity {
             }
         }
         return organizedComments;
+    }
+
+    protected int getrating() {
+        mApiService.getrating(kosView.kos_id).enqueue(new Callback<averageRating>() {
+            @Override
+            public void onResponse(Call<averageRating> call, Response<averageRating> response) {
+                if (response.isSuccessful()) {
+                    avgrating = response.body();
+                    if (avgrating.averageRating != 0){
+                        rating.setText(avgrating.averageRating);
+                    }
+                    else {
+                        rating.setText("0");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<averageRating> call, Throwable t) {
+                Toast.makeText(mContext, "salah", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return 0;
+    }
+    protected void addrating() {
+        mApiService.addrating(account.getID(),kosView.kos_id,rate).enqueue(new Callback<averageRating>() {
+            @Override
+            public void onResponse(Call<averageRating> call, Response<averageRating> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(mContext, "Rating Set", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<averageRating> call, Throwable t) {
+                Toast.makeText(mContext, "salah", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

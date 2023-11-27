@@ -258,6 +258,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Refrigerator" />
 
+        <LinearLayout
+            android:id="@+id/LinearSetRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bookButton">
+
+            <TextView
+                android:id="@+id/detailSetRatingText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="0dp"
+                android:text="Rate This Kos"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/detailSetRating"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="0dp"
+                android:text="0.00"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent" />
+            <Button
+                android:id="@+id/detailButtonRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="43dp"
+                android:layout_marginTop="0dp"
+                android:text="Rate"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/detailForum"
@@ -267,7 +305,7 @@
             android:text="Forum"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bookButton" />
+            app:layout_constraintTop_toBottomOf="@+id/LinearSetRating" />
 
 
         <androidx.recyclerview.widget.RecyclerView

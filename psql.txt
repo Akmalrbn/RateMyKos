@@ -4,6 +4,8 @@ rplsembilan
 qTu27CpWyMXh
 
 CREATE TYPE facility AS ENUM ('WiFi', 'AC', 'Bathroom', 'Refrigerator', 'Kitchen');
+CREATE TYPE tipe_kos AS ENUM ('Putra', 'Putri', 'Campur');
+
 
 CREATE TABLE users(
 	User_ID SERIAL PRIMARY KEY,
@@ -21,7 +23,8 @@ CREATE TABLE kos(
     	Longitude DOUBLE PRECISION NOT NULL,
 	Description TEXT,
 	Rating INT,
-	Facilities facility[]
+	Facilities facility[],
+	kos_type tipe_kos NOT NULL
 );
 SELECT * FROM kos;
 

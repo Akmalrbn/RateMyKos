@@ -4,6 +4,7 @@ import com.rpl9.ratemykos.model.Account;
 import com.rpl9.ratemykos.model.Comment;
 import com.rpl9.ratemykos.model.Facility;
 import com.rpl9.ratemykos.model.Kos;
+import com.rpl9.ratemykos.model.averageRating;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,10 @@ public interface BaseApiService {
     Call<List<Comment>> getreply
             (@Path("comment_id") int comment_id
     );
+    @GET("getrating/{kos_id}")
+    Call<averageRating> getrating
+            (@Path("kos_id") int kos_id
+    );
 
     @FormUrlEncoded
     @POST("addkosnofacilities")
@@ -73,6 +78,13 @@ public interface BaseApiService {
             @Field("description") String description,
             @Field("facilities") ArrayList<Facility> facilities,
             @Field("kos_type") String kos_type
+    );
+    @FormUrlEncoded
+    @POST("addrating")
+    Call<averageRating> addrating(
+            @Field("kos_id") int kos_id,
+            @Field("user_id") int user_id,
+            @Field("rating") int rating
     );
 
 
