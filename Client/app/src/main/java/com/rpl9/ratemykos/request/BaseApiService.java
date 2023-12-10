@@ -4,7 +4,7 @@ import com.rpl9.ratemykos.model.Account;
 import com.rpl9.ratemykos.model.Comment;
 import com.rpl9.ratemykos.model.Facility;
 import com.rpl9.ratemykos.model.Kos;
-import com.rpl9.ratemykos.model.averageRating;
+import com.rpl9.ratemykos.model.Rating;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface BaseApiService {
 
@@ -50,12 +49,18 @@ public interface BaseApiService {
     );
 
     @GET("getreply/{comment_id}")
-    Call<List<Comment>> getreply
-            (@Path("comment_id") int comment_id
+    Call<List<Comment>> getreply(
+            @Path("comment_id") int comment_id
     );
     @GET("getrating/{kos_id}")
-    Call<averageRating> getrating
-            (@Path("kos_id") int kos_id
+    Call<Rating> getrating(
+            @Path("kos_id") int kos_id
+    );
+    @FormUrlEncoded
+    @GET("getuserrating/{kos_id}")
+    Call<Rating> getuserrating(
+            @Path("kos_id") int kos_id,
+            @Field("user_id") int user_id
     );
 
     @FormUrlEncoded
@@ -81,11 +86,12 @@ public interface BaseApiService {
     );
     @FormUrlEncoded
     @POST("addrating")
-    Call<averageRating> addrating(
+    Call<Rating> addrating(
             @Field("kos_id") int kos_id,
             @Field("user_id") int user_id,
-            @Field("rating") int rating
+            @Field("rating") double rating
     );
+
 
 
 //    @GET("getallkos")

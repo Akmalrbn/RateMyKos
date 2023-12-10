@@ -13,24 +13,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rpl9.ratemykos.model.Comment;
 import com.rpl9.ratemykos.model.Facility;
-import com.rpl9.ratemykos.model.Kos;
-import com.rpl9.ratemykos.model.Kos_type;
-import com.rpl9.ratemykos.model.averageRating;
+import com.rpl9.ratemykos.model.Rating;
 import com.rpl9.ratemykos.request.BaseApiService;
 import com.rpl9.ratemykos.request.UtilsApi;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,9 +42,10 @@ public class KosDetailActivity extends AppCompatActivity {
     ForumAdapter adapter;
     public static List<Comment> commentList = new ArrayList<Comment>();
     public static List<Comment> organizedComments = new ArrayList<Comment>();
-    averageRating avgrating;
-    TextView rating;
-    int rate;
+    Rating kosRating, userRating;
+    TextView kosRatingText;
+    EditText userRatingText;
+    double rate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +54,7 @@ public class KosDetailActivity extends AppCompatActivity {
         mContext = this;
         Log.d("Listkos", "Masuk" + kosView.name);
         getcomment();
+//        getuserrating();
         adapter = new ForumAdapter(organizedComments);
         RecyclerView recyclerView = findViewById(R.id.commentRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -68,9 +64,9 @@ public class KosDetailActivity extends AppCompatActivity {
 //        TextView size = findViewById(R.id.detailSizeText);
 //        TextView price = findViewById(R.id.detailPriceText);
         TextView address = findViewById(R.id.detailLocationText);
-        TextView ratingText = findViewById(R.id.detailSetRating);
         Button setRating = findViewById(R.id.detailButtonRating);
-        rating = findViewById(R.id.detailRatingText);
+        kosRatingText = findViewById(R.id.detailRatingText);
+        userRatingText = findViewById(R.id.detailSetRating);
         CheckBox WiFi = findViewById(R.id.Wifi);
         CheckBox AC = findViewById(R.id.AC);
         CheckBox Bathroom = findViewById(R.id.Bathroom);
@@ -113,7 +109,8 @@ public class KosDetailActivity extends AppCompatActivity {
         setRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int rate = Integer.parseInt(ratingText.getText().toString());
+                rate = Double.parseDouble(userRatingText.getText().toString());
+                Log.d("SET RATING", String.valueOf(rate));
                 addrating();
             }
         });
@@ -170,39 +167,65 @@ public class KosDetailActivity extends AppCompatActivity {
     }
 
     protected int getrating() {
-        mApiService.getrating(kosView.kos_id).enqueue(new Callback<averageRating>() {
+        mApiService.getrating(kosView.kos_id).enqueue(new Callback<Rating>() {
             @Override
-            public void onResponse(Call<averageRating> call, Response<averageRating> response) {
+            public void onResponse(Call<Rating> call, Response<Rating> response) {
                 if (response.isSuccessful()) {
-                    avgrating = response.body();
-                    if (avgrating.averageRating != 0){
-                        rating.setText(avgrating.averageRating);
+                    kosRating = response.body();
+                    if (kosRating.rating != 0){
+                        kosRatingText.setText(String.valueOf(kosRating.rating));
                     }
                     else {
-                        rating.setText("0");
+                        kosRatingText.setText("0");
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<averageRating> call, Throwable t) {
+            public void onFailure(Call<Rating> call, Throwable t) {
+                t.printStackTrace();
                 Toast.makeText(mContext, "salah", Toast.LENGTH_SHORT).show();
             }
         });
         return 0;
     }
-    protected void addrating() {
-        mApiService.addrating(account.getID(),kosView.kos_id,rate).enqueue(new Callback<averageRating>() {
+    protected int getuserrating() {
+        mApiService.getuserrating(kosView.kos_id, account.getID()).enqueue(new Callback<Rating>() {
             @Override
-            public void onResponse(Call<averageRating> call, Response<averageRating> response) {
+            public void onResponse(Call<Rating> call, Response<Rating> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(mContext, "Rating Set", Toast.LENGTH_SHORT).show();
+                    userRating = response.body();
+                    if (userRating.rating != 0){
+                        userRatingText.setText(String.valueOf(userRating.rating));
+                    }
+                    else {
+                        userRatingText.setText("0");
+                    }
                 }
             }
+
             @Override
-            public void onFailure(Call<averageRating> call, Throwable t) {
+            public void onFailure(Call<Rating> call, Throwable t) {
                 Toast.makeText(mContext, "salah", Toast.LENGTH_SHORT).show();
             }
         });
+        return 0;
+    }
+    protected int addrating() {
+        mApiService.addrating(kosView.kos_id, account.getID(),rate).enqueue(new Callback<Rating>() {
+            @Override
+            public void onResponse(Call<Rating> call, Response<Rating> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(mContext, "Rating Set", Toast.LENGTH_SHORT).show();
+                    Log.d("Rating Set", "Acc ID: " + account.getID() + " Kos ID: "+ kosView.kos_id + "rate ID: "+ rate);
+                }
+            }
+            @Override
+            public void onFailure(Call<Rating> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(mContext, "salah", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return 0;
     }
 }

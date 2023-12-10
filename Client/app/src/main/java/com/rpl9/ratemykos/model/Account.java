@@ -2,13 +2,13 @@ package com.rpl9.ratemykos.model;
 
 
 public class Account {
-    private int kos_id;
+    private int user_id;
     private String email;
     private String username;
     private User_type usertype;
 
     public int getID() {
-        return kos_id;
+        return user_id;
     }
     public String getEmail() {
         return email;

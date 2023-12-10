@@ -212,7 +212,6 @@ router.post('/addkos', (req, res) => {
           res.status(500).json({ error: 'Failed to register kos' });
           return;
       }
-
       const insertedKos = result.rows[0];
       res.json({ message: `kos: ${insertedKos.name}, pada lokasi: ${insertedKos.location} berhasil terdaftar`, insertedKos });
   });
@@ -223,7 +222,7 @@ router.post('/addkosnofacilities', (req, res) => {
   const { name, location, latitude, longitude, description } = req.body;
   temp = req.session;
   temp.name = name;
-  temp.location = location;
+  temp.location = location;ad
   temp.latitude = latitude;
   temp.longitude = longitude;
   temp.description = description;
@@ -390,9 +389,9 @@ router.get('/getrating/:kos_id', async (req, res) => {
       const values = [kos_id];
 
       const result = await db.query(query, values);
-      const averageRating = result.rows[0].average_rating;
+      const rating = result.rows[0].average_rating;
 
-      res.json({ averageRating }); // Send the average rating as a JSON response
+      res.json({ rating }); // Send the average rating as a JSON response
   } catch (error) {
       console.error('An error occurred while fetching data from the database:', error);
       res.status(500).json({ error: 'An error occurred while processing the request' });
@@ -408,8 +407,8 @@ router.get('/getuserrating/:kos_id', async (req, res) => {
       const values = [kos_id, user_id];
 
       const result = await db.query(query, values);
-      
-      res.json({ result }); // Send the average rating as a JSON response
+      const rating = result.rows[0].rating;
+      res.json({ rating }); // Send the average rating as a JSON response
   } catch (error) {
       console.error('An error occurred while fetching data from the database:', error);
       res.status(500).json({ error: 'An error occurred while processing the request' });
@@ -419,24 +418,29 @@ router.get('/getuserrating/:kos_id', async (req, res) => {
 router.post('/addrating', async (req, res) => {
   const { user_id, kos_id, rating } = req.body; 
   try {
-      // Check if the rating already exists for the given user_id and kos_id
-      const result = await db.query('SELECT * FROM ratings WHERE user_id = $1 AND kos_id = $2', [user_id, kos_id]);
-      
-      if (result.rows.length > 0) {
-        // If the rating exists, update it
-        await db.query('UPDATE ratings SET rating = $1 WHERE user_id = $2 AND kos_id = $3', [rating, user_id, kos_id]);
-      } else {
-        // If the rating doesn't exist, insert a new row
-        await db.query('INSERT INTO ratings (user_id, kos_id, rating) VALUES ($1, $2, $3)', [user_id, kos_id, rating]);
-      }
-      res.sendStatus(200); // Send a success status
+    // Check if the rating already exists for the given user_id and kos_id
+    const result = await db.query('SELECT * FROM ratings WHERE user_id = $1 AND kos_id = $2', [user_id, kos_id]);
+
+    if (result.rows.length > 0) {
+      // If the rating exists, update it
+      await db.query('UPDATE ratings SET rating = $1 WHERE user_id = $2 AND kos_id = $3', [rating, user_id, kos_id]);
+    } else {
+      // If the rating doesn't exist, insert a new row
+      await db.query('INSERT INTO ratings (user_id, kos_id, rating) VALUES ($1, $2, $3)', [user_id, kos_id, rating]);
+    }
+
+    // Send a JSON response on success
+    res.status(200).json({ message: 'Rating stored successfully' });
+    console.log('Rating stored successfully');
+
   } catch (error) {
-      console.error('An error occurred while storing the rating:', error);
-      res.status(500).json({ error: 'An error occurred while processing the request' });
+    console.error('An error occurred while storing the rating:', error);
+    res.status(500).json({ success: false, error: 'An error occurred while processing the request' });
   }
-  });
+});
+
   
-//Router 7: mengheapus session
+//Router 7: menghapus session
 router.post('/logout', (req, res) => {
   // Destroy the session
   req.session.destroy((err) => {
