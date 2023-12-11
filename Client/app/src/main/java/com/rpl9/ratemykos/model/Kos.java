@@ -13,5 +13,5 @@ public class Kos {
     public ArrayList<Date> booked = new ArrayList<Date>();
     public ArrayList<Facility> facilities = new ArrayList<Facility>();
     public Kos_type kos_type;
-
+    public int average_rating;
 }

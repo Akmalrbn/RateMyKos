@@ -199,8 +199,14 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.person){
-            Intent move = new Intent(HomeActivity.this, UserActivity.class);
-            startActivity(move);
+            if (accLoggedIn != null) {
+                Intent move = new Intent(HomeActivity.this, UserActivity.class);
+                startActivity(move);
+            }
+            else {
+                Intent move = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(move);
+            }
         }
         if(item.getItemId() == R.id.add_box){
             Intent move = new Intent(HomeActivity.this, CreateKosActivity.class);

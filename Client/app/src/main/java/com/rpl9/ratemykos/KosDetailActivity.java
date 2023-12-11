@@ -1,6 +1,7 @@
 package com.rpl9.ratemykos;
 
 
+import static com.rpl9.ratemykos.HomeActivity.accLoggedIn;
 import static com.rpl9.ratemykos.HomeActivity.kosView;
 import static com.rpl9.ratemykos.LoginActivity.account;
 
@@ -76,8 +77,13 @@ public class KosDetailActivity extends AppCompatActivity {
         name.setText(kosView.name);
         address.setText(kosView.location);
         KosType.setText(kosView.kos_type.toString());
+        if (kosView.average_rating != 0){
+            kosRatingText.setText(String.valueOf(kosView.average_rating));
+        }
+        if (accLoggedIn != null){
+            getuserrating();
+        }
 
-        getrating();
         if (kosView.facilities != null) {
             if (kosView.facilities.contains(Facility.WiFi)) {
                 WiFi.setChecked(true);
@@ -109,9 +115,16 @@ public class KosDetailActivity extends AppCompatActivity {
         setRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rate = Double.parseDouble(userRatingText.getText().toString());
-                Log.d("SET RATING", String.valueOf(rate));
-                addrating();
+                if (accLoggedIn == null){
+                    Toast.makeText(mContext, "Harus Login Terlebih Dahulu", Toast.LENGTH_SHORT).show();
+                    Intent move = new Intent(KosDetailActivity.this, LoginActivity.class);
+                    startActivity(move);
+                }
+                else{
+                    rate = Double.parseDouble(userRatingText.getText().toString());
+                    Log.d("SET RATING", String.valueOf(rate));
+                    addrating();
+                }
             }
         });
     }
@@ -166,29 +179,6 @@ public class KosDetailActivity extends AppCompatActivity {
         return organizedComments;
     }
 
-    protected int getrating() {
-        mApiService.getrating(kosView.kos_id).enqueue(new Callback<Rating>() {
-            @Override
-            public void onResponse(Call<Rating> call, Response<Rating> response) {
-                if (response.isSuccessful()) {
-                    kosRating = response.body();
-                    if (kosRating.rating != 0){
-                        kosRatingText.setText(String.valueOf(kosRating.rating));
-                    }
-                    else {
-                        kosRatingText.setText("0");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Rating> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(mContext, "salah", Toast.LENGTH_SHORT).show();
-            }
-        });
-        return 0;
-    }
     protected int getuserrating() {
         mApiService.getuserrating(kosView.kos_id, account.getID()).enqueue(new Callback<Rating>() {
             @Override
@@ -203,7 +193,6 @@ public class KosDetailActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<Rating> call, Throwable t) {
                 Toast.makeText(mContext, "salah", Toast.LENGTH_SHORT).show();

@@ -52,10 +52,7 @@ public interface BaseApiService {
     Call<List<Comment>> getreply(
             @Path("comment_id") int comment_id
     );
-    @GET("getrating/{kos_id}")
-    Call<Rating> getrating(
-            @Path("kos_id") int kos_id
-    );
+
     @FormUrlEncoded
     @GET("getuserrating/{kos_id}")
     Call<Rating> getuserrating(
