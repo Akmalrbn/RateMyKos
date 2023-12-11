@@ -5,9 +5,12 @@
 In the college era, boarding accommodation is needed that suits the needs of each student. In pursuing their education in the world of college, it is necessary to migrate from their hometown, to a new environment close to their campus. Therefore, this project aims to facilitate students in choosing the best boarding house for them to live in. This project is an application project that facilitates students to choose the best boarding house for them. This project can help integration between students and boarding house owners, where students can book rooms available at the boarding house.
 
 ## 🛠️ Tools Used
-- Android Studio <img src="https://github.com/Akmalrbn/RateMyKos/blob/master/android_logo.png" alt="Android Studio" width="100"/> 
-- NeonDB <img src="https://github.com/Akmalrbn/RateMyKos/blob/master/neon_logo.png" alt="NeonDB" width="100"/> 
-- Nodejs <img src="https://github.com/Akmalrbn/RateMyKos/blob/master/nodejs_logo.png" alt="Nodejs" width="100"/> 
+- Android Studio :
+  <img src="https://github.com/Akmalrbn/RateMyKos/blob/master/android_logo.png" alt="Android Studio" width="100"/> 
+- NeonDB :
+  <img src="https://github.com/Akmalrbn/RateMyKos/blob/master/neon_logo.png" alt="NeonDB" width="100"/> 
+- Nodejs :
+  <img src="https://github.com/Akmalrbn/RateMyKos/blob/master/nodejs_logo.png" alt="Nodejs" width="100"/> 
 
 ## ⚙️ Features
 - User Registration and Profiles
