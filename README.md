@@ -33,3 +33,6 @@ In the college era, boarding accommodation is needed that suits the needs of eac
 ## ▶️ Demo
 [Link to demo.
 ](https://github.com/Akmalrbn/RateMyKos/blob/master/RateMyKost_Group9%20(1).pdf)https://github.com/Akmalrbn/RateMyKos/blob/master/RateMyKost_Group9%20(1).pdf
+
+## ▶️ User Manual
+[Link to User Manual](https://github.com/Akmalrbn/RateMyKos/blob/master/RateMyKos_UserManual.pdf)
