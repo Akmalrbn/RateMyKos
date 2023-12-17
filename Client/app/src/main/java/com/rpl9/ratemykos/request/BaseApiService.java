@@ -43,8 +43,21 @@ public interface BaseApiService {
     @GET("getallkos")
     Call<List<Kos>> getall();
 
+    @FormUrlEncoded
+    @POST("addcomment")
+    Call<String> addcomment(
+            @Field("kos_id") int kos_id,
+            @Field("user_id") int user_id,
+            @Field("comment") String comment
+    );
+
+
     @GET("getcomment/{kos_id}")
     Call<List<Comment>> getcomment(
+            @Path("kos_id") int kos_id
+    );
+    @GET("getkos/{kos_id}")
+    Call<Kos> getkos(
             @Path("kos_id") int kos_id
     );
 
@@ -53,11 +66,10 @@ public interface BaseApiService {
             @Path("comment_id") int comment_id
     );
 
-    @FormUrlEncoded
-    @GET("getuserrating/{kos_id}")
+    @GET("getuserrating/{kos_id}/{user_id}")
     Call<Rating> getuserrating(
             @Path("kos_id") int kos_id,
-            @Field("user_id") int user_id
+            @Path("user_id") int user_id
     );
 
     @FormUrlEncoded
@@ -86,7 +98,7 @@ public interface BaseApiService {
     Call<Rating> addrating(
             @Field("kos_id") int kos_id,
             @Field("user_id") int user_id,
-            @Field("rating") double rating
+            @Field("rating") float rating
     );
 
 

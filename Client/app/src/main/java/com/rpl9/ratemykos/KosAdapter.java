@@ -24,10 +24,12 @@ public class KosAdapter extends ArrayAdapter<Kos> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.itemlist, parent, false);
         }
-        TextView name = (TextView) convertView.findViewById(R.id.itemList);
-        TextView location = convertView.findViewById(R.id.listLocation);
+        TextView name = (TextView) convertView.findViewById(R.id.kosNameList);
+        TextView location = convertView.findViewById(R.id.kosLocationList);
+        TextView type =  convertView.findViewById(R.id.kosTypeList);
         name.setText(kos.name);
         location.setText(kos.location);
+        type.setText(kos.kos_type.toString());
         return convertView;
     }
 }

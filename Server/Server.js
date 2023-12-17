@@ -244,19 +244,19 @@ router.post('/addkosnofacilities', (req, res) => {
   });
 });
 
-router.get('/getkos', async (req, res) => {
-  const { name } = req.body;
-  try {
-    const query = `SELECT * FROM kos WHERE name = $1;`;
-    const values = [name];
-    const result = await db.query(query, values);
-    res.json(result.rows[0])
-    console.log(result.rows[0]);
-  } catch (error) {
-    console.error('Error retrieving user:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-  });
+// router.get('/getkos', async (req, res) => {
+//   const { name } = req.body;
+//   try {
+//     const query = `SELECT * FROM kos WHERE name = $1;`;
+//     const values = [name];
+//     const result = await db.query(query, values);
+//     res.json(result.rows[0])
+//     console.log(result.rows[0]);
+//   } catch (error) {
+//     console.error('Error retrieving user:', error);
+//     return res.status(500).json({ error: 'Internal server error' });
+//   }
+//   });
 
   // router.get('/getallkos', async (req, res) => {
   // try {
@@ -313,6 +313,46 @@ router.get('/getkos', async (req, res) => {
       res.status(500).json({ error: 'An error occurred while processing the request' });
     }
   });
+
+  router.get('/getkos/:kos_id', async (req, res) => {
+    const { kos_id } = req.params;
+  
+    try {
+      const query = `
+        SELECT
+          k.*,
+          COALESCE(AVG(r.rating), 0) AS average_rating
+        FROM
+          kos k
+        LEFT JOIN
+          ratings r ON k.kos_id = r.kos_id
+        WHERE
+          k.kos_id = $1
+        GROUP BY
+          k.kos_id;
+      `;
+  
+      const result = await db.query(query, [kos_id]);
+  
+      if (result.rows.length === 0) {
+        res.status(404).json({ error: 'Kos not found' });
+        return;
+      }
+  
+      const kosWithRating = {
+        ...result.rows[0],
+        facilities: result.rows[0].facilities
+          ? result.rows[0].facilities.substring(1, result.rows[0].facilities.length - 1).split(',')
+          : [],
+      };
+  
+      res.json(kosWithRating);
+    } catch (error) {
+      console.error('An error occurred while fetching data from the database:', error);
+      res.status(500).json({ error: 'An error occurred while processing the request' });
+    }
+  });
+  
   
    
 router.post('/addcomment', async (req, res) => {
@@ -427,9 +467,8 @@ router.get('/getreply/:reply_id', async (req, res) => {
 //   }
 // });
 
-router.get('/getuserrating/:kos_id', async (req, res) => {
-  const { kos_id } = req.params; 
-  const { user_id } = req.body; 
+router.get('/getuserrating/:kos_id/:user_id', async (req, res) => {
+  const { kos_id, user_id } = req.params;
   try {
       // Retrieve the average rating from the PostgreSQL database based on the kos ID & user_id
       const query = 'SELECT rating FROM ratings WHERE kos_id = $1 and user_id = $2';

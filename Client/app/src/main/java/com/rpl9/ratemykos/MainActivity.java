@@ -1,7 +1,9 @@
 package com.rpl9.ratemykos;
 
 import static android.content.ContentValues.TAG;
+import static android.view.View.GONE;
 
+import static com.rpl9.ratemykos.LoginActivity.account;
 import static com.rpl9.ratemykos.utils.Constants.ERROR_DIALOG_REQUEST;
 import static com.rpl9.ratemykos.utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.rpl9.ratemykos.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -60,6 +62,11 @@ import retrofit2.Response;
             login = findViewById(R.id.loginMain);
             listbutton = findViewById(R.id.List);
             signUpText = findViewById(R.id.signupText);
+
+            if(account != null){
+                signUpText.setVisibility(GONE);
+                login.setVisibility(GONE);
+            }
             signUpText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

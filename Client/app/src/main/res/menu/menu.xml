@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/search_button"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:title="Search Button"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="collapseActionView|always"/>
-    <item android:id="@+id/person"
-        android:icon="@drawable/ic_baseline_person_24"
+
+    <item
+        android:id="@+id/person"
+        android:icon="@drawable/baseline_person_24"
         android:title="Person"
-        app:showAsAction="collapseActionView|always"/>
-    <item android:id="@+id/add_box"
-        android:icon="@drawable/ic_baseline_add_box_24"
-        android:title="Add Box"
         app:showAsAction="collapseActionView|always" />
 
-<!--    <item-->
-<!--        android:id="@+id/balance_menu"-->
-<!--        android:title=""-->
-<!--        app:showAsAction="collapseActionView|always" />-->
-
+    <item
+        android:id="@+id/add_box"
+        android:icon="@drawable/baseline_add_location_alt_24"
+        android:title="Add Box"
+        app:showAsAction="collapseActionView|always" />
 
 </menu>

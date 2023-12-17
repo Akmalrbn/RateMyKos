@@ -6,89 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/groupFilter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="LinearTypeFilter" />
+<!--    <androidx.constraintlayout.widget.Group-->
+<!--        android:id="@+id/groupFilter"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:visibility="visible"-->
+<!--        app:constraint_referenced_ids="LinearTypeFilter" />-->
 
-    <LinearLayout
-        android:id="@+id/LinearTypeFilter"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterTitle">
-
-        <TextView
-            android:id="@+id/TypeFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="28dp"
-            android:text="Type"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/nextButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Spinner
-            android:id="@+id/TypeFilterSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="51dp"
-            app:layout_constraintEnd_toStartOf="@+id/page"
-            app:layout_constraintStart_toEndOf="@+id/prevButton"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/setTypeFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:text="Set"
-            android:textSize="15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LinearFacilityFilter" />
+<!--    <TextView-->
+<!--        android:id="@+id/filterTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="3dp"-->
+<!--        android:layout_marginTop="9dp"-->
+<!--        android:text="Filter"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
-    </LinearLayout>
 
 <!--    <LinearLayout-->
-<!--        android:id="@+id/LinearBedTypeFilter"-->
+<!--        android:id="@+id/LinearTypeFilter"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="35dp"-->
+<!--        android:layout_marginTop="8dp"-->
 <!--        android:orientation="horizontal"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintHorizontal_bias="0.0"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/LinearCityFilter">-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/filterTitle">-->
 
 <!--        <TextView-->
-<!--            android:id="@+id/BedTypeFilter"-->
-<!--            android:layout_width="93dp"-->
+<!--            android:id="@+id/TypeFilter"-->
+<!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
 <!--            android:layout_marginStart="5dp"-->
-<!--            android:ems="10"-->
-<!--            android:text="Bed Type"-->
+<!--            android:layout_marginEnd="28dp"-->
+<!--            android:text="Type"-->
 <!--            android:textSize="20dp"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/goButton"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/nextButton"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/nextButton"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
 <!--        <Spinner-->
-<!--            android:id="@+id/BedTypeFilterSpinner"-->
+<!--            android:id="@+id/TypeFilterSpinner"-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:text="GO" />-->
+<!--            android:layout_marginStart="51dp"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/page"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/prevButton"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
 <!--        <TextView-->
-<!--            android:id="@+id/setBedTypeFilter"-->
+<!--            android:id="@+id/setTypeFilter"-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
 <!--            android:layout_marginStart="90dp"-->
@@ -97,92 +67,85 @@
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/LinearFacilityFilter" />-->
 
+
 <!--    </LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/LinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearTypeFilter">
-
-        <Button
-            android:id="@+id/prevButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginEnd="28dp"
-            android:text="PREV"
-            app:layout_constraintEnd_toStartOf="@+id/nextButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="30dp"
-            android:text="NEXT"
-            app:layout_constraintEnd_toStartOf="@+id/page"
-            app:layout_constraintStart_toEndOf="@+id/prevButton"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/page"
-            android:layout_width="61dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="7dp"
-            android:ems="10"
-            android:inputType="number"
-            android:selectAllOnFocus="false"
-            android:singleLine="false"
-            android:text="3"
-            app:layout_constraintEnd_toStartOf="@+id/goButton"
-            app:layout_constraintStart_toEndOf="@+id/nextButton"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/goButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GO" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/filterTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="9dp"
-        android:text="Filter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/mapHome" />
 
     <fragment
         android:id="@+id/mapHome"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/list"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintHeight_percent="0.5" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.5" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/searchHome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/search_bg"
+        android:drawableStart="@drawable/search_logo"
+        android:drawablePadding="5dp"
+        android:hint="Search"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/KosSortSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="@drawable/search_bg"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="24dp"
+        android:hint="Search"
+        android:textSize="5sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchHome" />
+
+    <Spinner
+        android:id="@+id/KosTypeSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="@drawable/search_bg"
+        android:layout_marginTop="5dp"
+        android:textSize="5sp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/searchHome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <Spinner
+        android:id="@+id/KosFacilitySpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="@drawable/search_bg"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="24dp"
+        android:hint="Search"
+        android:textSize="5sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchHome" />
+
 
 
 

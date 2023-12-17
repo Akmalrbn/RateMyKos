@@ -1,5 +1,7 @@
 package com.rpl9.ratemykos;
 
+import static com.rpl9.ratemykos.LoginActivity.account;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Group;
@@ -12,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -34,13 +38,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rpl9.ratemykos.model.Account;
+import com.rpl9.ratemykos.model.Facility;
 import com.rpl9.ratemykos.model.Kos;
 import com.rpl9.ratemykos.model.Kos_type;
 import com.rpl9.ratemykos.request.BaseApiService;
 import com.rpl9.ratemykos.request.UtilsApi;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,9 +59,11 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     Context mContext;
     public static ArrayList<Kos> arrayOfKos = new ArrayList<Kos>();
     public static ArrayList<Kos> KosList = new ArrayList<Kos>();
+    public static List<String> suggestions = new ArrayList<String>();
+
+    Spinner typeSpin, facilitySpin;
     KosAdapter adapter;
     int pageSize = 0;
-    public static Account accLoggedIn;
     public static Kos kosView;
     private GoogleMap mMap;
     private MapFragment mapFragment;
@@ -72,17 +81,14 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Button next = findViewById(R.id.nextButton);
-        Button prev = findViewById(R.id.prevButton);
-        Button go = findViewById(R.id.goButton);
-        EditText page = findViewById(R.id.page);
-        TextView filter = findViewById(R.id.filterTitle);
-        TextView setType = findViewById(R.id.setTypeFilter);
-
-        Group groupFilter = findViewById(R.id.groupFilter);
-        Spinner typeSpin = (Spinner) findViewById(R.id.TypeFilterSpinner);
+        typeSpin = (Spinner) findViewById(R.id.KosSortSpinner);
         typeSpin.setAdapter((new ArrayAdapter<Kos_type>(this, android.R.layout.simple_spinner_dropdown_item, Kos_type.values())));
-        requestRoom(pageSize);
+        facilitySpin = (Spinner) findViewById(R.id.KosFacilitySpinner);
+        facilitySpin.setAdapter((new ArrayAdapter<Facility>(this, android.R.layout.simple_spinner_dropdown_item, Facility.values())));
+        ArrayAdapter<String> adapterSearch = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, suggestions);
+        AutoCompleteTextView searchBar = findViewById(R.id.searchHome);
+        searchBar.setAdapter(adapterSearch);
+        requestKos();
         getAll();
         adapter = new KosAdapter(this, arrayOfKos);
         ListView listView = (ListView) findViewById(R.id.list);
@@ -97,91 +103,55 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(move);
             }
         });
-        next.setOnClickListener(new View.OnClickListener() {
+// Set up listeners
+        typeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                pageSize++;
-                page.setText(String.valueOf(pageSize+1));
-                requestRoom(pageSize);
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                filterKosList();
             }
-        });
-        prev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (pageSize > 0){
-                    pageSize--;
-                }
 
-                page.setText(String.valueOf(pageSize+1));
-                requestRoom(pageSize);
-            }
-        });
-        go.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                pageSize = Integer.parseInt(page.getText().toString())-1;
-                requestRoom(pageSize);
-                resetMap();
-            }
-        });
-        filter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (groupFilter.getVisibility() == View.GONE){
-                    groupFilter.setVisibility(View.VISIBLE);
-                }
-                else if (groupFilter.getVisibility() == View.VISIBLE){
-                    groupFilter.setVisibility(View.GONE);
-                    requestRoom(pageSize);
-                }
+            public void onNothingSelected(AdapterView<?> parentView) {
+                getAll();
             }
         });
 
-        setType.setOnClickListener(new View.OnClickListener() {
+        facilitySpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Kos_type typeFil = Kos_type.valueOf(typeSpin.getSelectedItem().toString());
-                arrayOfKos.clear();
-                for (Kos filter : KosList) {
-                    if (filter.kos_type == typeFil) {
-                        arrayOfKos.add(filter);
-                    }
-                }
-                adapter.notifyDataSetChanged();
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                filterKosList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                getAll();
             }
         });
-//        setBed.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                BedType bedFil = BedType.valueOf(bedSpin.getSelectedItem().toString());
-//                arrayOfRoom.clear();
-//                for (Room filter : KosList) {
-//                    if (filter.bedType == bedFil) {
-//                        arrayOfRoom.add(filter);
-//                    }
-//                }
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        addKos = menu.findItem(R.id.add_box);
-        SearchView search = (SearchView) menu.findItem(R.id.search_button).getActionView();
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that characters within `charSequence` are about to be replaced with new text
             }
+
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that characters within `charSequence` have been replaced with new text
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This method is called to notify you that somewhere within `editable` text has been changed
+                // You can perform actions here based on the current text in the AutoCompleteTextView
+                String newText = editable.toString();
                 System.out.println(newText);
+                // Clear the existing data in arrayOfKos
                 arrayOfKos.clear();
+
+                // If the text is empty, add all items from KosList
                 if (newText.length() == 0 || newText == null) {
                     arrayOfKos.addAll(KosList);
                 } else {
+                    // Filter items based on the current text
                     for (Kos filter : KosList) {
                         if (filter.name.toLowerCase().contains(newText.toLowerCase())) {
                             arrayOfKos.add(filter);
@@ -189,24 +159,102 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     }
                 }
+
+                // Notify the adapter that the data has changed
                 adapter.notifyDataSetChanged();
-                return false;
+                resetMap();
             }
         });
+
+    }
+    private void filterKosList() {
+        Kos_type selectedType = Kos_type.valueOf(typeSpin.getSelectedItem().toString());
+        Facility selectedFacility = Facility.valueOf(facilitySpin.getSelectedItem().toString());
+
+        if(Kos_type.valueOf(typeSpin.getSelectedItem().toString()) == Kos_type.All
+                && Facility.valueOf(facilitySpin.getSelectedItem().toString()) == Facility.All){
+            getAll();
+            requestKos();
+        } else if (Kos_type.valueOf(typeSpin.getSelectedItem().toString()) == Kos_type.All
+                && Facility.valueOf(facilitySpin.getSelectedItem().toString()) != Facility.All) {
+            Facility facilityFil = Facility.valueOf(facilitySpin.getSelectedItem().toString());
+            arrayOfKos.clear();
+            for (Kos filter : KosList) {
+                if (filter.facilities.contains(facilityFil)) {
+                    arrayOfKos.add(filter);
+                }
+            }
+            adapter.notifyDataSetChanged();
+            resetMap();
+        } else if (Kos_type.valueOf(typeSpin.getSelectedItem().toString()) != Kos_type.All
+                && Facility.valueOf(facilitySpin.getSelectedItem().toString()) == Facility.All) {
+            Kos_type typeFil = Kos_type.valueOf(typeSpin.getSelectedItem().toString());
+            arrayOfKos.clear();
+            for (Kos filter : KosList) {
+                if (filter.kos_type == typeFil) {
+                    arrayOfKos.add(filter);
+                }
+            }
+            adapter.notifyDataSetChanged();
+            resetMap();
+        } else {
+            Kos_type typeFil = Kos_type.valueOf(typeSpin.getSelectedItem().toString());
+            Facility facilityFil = Facility.valueOf(facilitySpin.getSelectedItem().toString());
+            arrayOfKos.clear();
+            for (Kos filter : KosList) {
+                if (filter.kos_type == typeFil && filter.facilities.contains(facilityFil)) {
+                    arrayOfKos.add(filter);
+                }
+            }
+            adapter.notifyDataSetChanged();
+            resetMap();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        addKos = menu.findItem(R.id.add_box);
+//        SearchView search = (SearchView) menu.findItem(R.id.search_button).getActionView();
+//        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                System.out.println(newText);
+//                arrayOfKos.clear();
+//                if (newText.length() == 0 || newText == null) {
+//                    arrayOfKos.addAll(KosList);
+//                } else {
+//                    for (Kos filter : KosList) {
+//                        if (filter.name.toLowerCase().contains(newText.toLowerCase())) {
+//                            arrayOfKos.add(filter);
+//                            System.out.println(newText.toLowerCase());
+//                        }
+//                    }
+//                }
+//                adapter.notifyDataSetChanged();
+//                return false;
+//            }
+//        });
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.person){
-            if (accLoggedIn != null) {
-                Intent move = new Intent(HomeActivity.this, UserActivity.class);
+            if(account == null){
+                Intent move = new Intent(HomeActivity.this, LoginActivity.class);
+                Toast.makeText(mContext, "Login dulu bang", Toast.LENGTH_SHORT).show();
                 startActivity(move);
             }
             else {
-                Intent move = new Intent(HomeActivity.this, LoginActivity.class);
+                Intent move = new Intent(HomeActivity.this, UserActivity.class);
                 startActivity(move);
             }
+
         }
         if(item.getItemId() == R.id.add_box){
             Intent move = new Intent(HomeActivity.this, CreateKosActivity.class);
@@ -214,12 +262,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return super.onOptionsItemSelected(item);
     }
-    /**
-     * Mendapatkan 8 room sesuai parameter page yang akan ditampilkan pada listview
-     * @param page
-     * @return
-     */
-    protected List<Kos> requestRoom(int page){
+
+    protected List<Kos> requestKos(){
         mApiService.getall().enqueue(new Callback<List<Kos>>() {
 
             @Override
@@ -234,17 +278,13 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onFailure(Call<List<Kos>> call, Throwable t) {
-                Toast.makeText(mContext, "no Kos", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "no Kos", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
             }
         });
         return null;
     }
 
-    /**
-     * Mendapatkan semua room yang ada dan disimpan dalam ArrayList<Room> KosList
-     * @return null
-     */
     protected List<Kos> getAll(){
         mApiService.getall().enqueue(new Callback<List<Kos>>() {
             @Override
@@ -252,11 +292,17 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(response.isSuccessful()) {
                     KosList.clear();
                     KosList.addAll(response.body());
+                    Set<String> uniqueNamesSet = new HashSet<>(); // Use a Set to store unique names
+                    for (Kos kos : KosList) {
+                        String name = kos.name;
+                        if (!uniqueNamesSet.contains(name)) {
+                            suggestions.add(name);
+                            uniqueNamesSet.add(name); // Add the name to the set to mark it as encountered
+                        }
+                    }
                     resetMap();
                     Log.d("HASIL2", response.body().toString());
-                    for (Kos kos : KosList) {
-                        System.out.println(kos.name + kos.facilities);
-                    }
+
                 }
             }
             @Override
@@ -270,7 +316,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         getAll();
-        requestRoom(5);
+        requestKos();
         LatLng UI = new LatLng(-6.3606, 106.8272);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UI, 15));
         mMap.addMarker(new MarkerOptions().position(UI).title("Universitas Indonesia"));
@@ -283,7 +329,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         } else {
             // Handle the case where arrayOfKos is empty (no data available yet)
-            Toast.makeText(mContext, "No data available for map markers", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, "No data available for map markers", Toast.LENGTH_SHORT).show();
         }
         // Iterate through the list of Kos and add a marker for each one
 //        LatLng testLocation = new LatLng(arrayOfKos.get(0).latitute, arrayOfKos.get(0).latitute);
@@ -295,7 +341,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         LatLng UP = new LatLng(-6.3606, 106.8272);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UP, 15));
-        mMap.addMarker(new MarkerOptions().position(UP).title("Universitas Pancasila"));
+        mMap.addMarker(new MarkerOptions().position(UP).title("Universitas Indonesia"));
         if (!arrayOfKos.isEmpty()) {
             // Move the map-related code inside onResponse to ensure data is available
             // Iterate through the list of Kos and add a marker for each one
@@ -309,4 +355,5 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
+
 }

@@ -1,6 +1,7 @@
 package com.rpl9.ratemykos;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -74,33 +75,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UI, 15));
     }
 
-//    private void onSaveButtonClick() {
-//        if (currentMarkerPosition != null) {
-//            // Save latitude and longitude to global variables
-//            latitude = currentMarkerPosition.latitude;
-//            longitude = currentMarkerPosition.longitude;
-//
-//            Toast.makeText(MapsActivity.this, "Latitude: " + latitude + ", Longitude: " + longitude + " saved", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(MapsActivity.this, "No marker to save", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-private void onSaveButtonClick() {
-    if (currentMarkerPosition != null) {
-        // Save latitude and longitude to global variables
-        latitu = currentMarkerPosition.latitude;
-        longitu = currentMarkerPosition.longitude;
+    private void onSaveButtonClick() {
+        if (currentMarkerPosition != null) {
+            // Define the center LatLng
+            LatLng centerLatLng = new LatLng(-6.3606, 106.8272);
 
-        // Create an Intent to send back the result
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("SELECTED_LATITUDE", latitu);
-        resultIntent.putExtra("SELECTED_LONGITUDE", longitu);
+            // Calculate the distance between the current marker position and the center
+            float[] distance = new float[1];
+            Location.distanceBetween(
+                    centerLatLng.latitude, centerLatLng.longitude,
+                    currentMarkerPosition.latitude, currentMarkerPosition.longitude,
+                    distance
+            );
 
-        setResult(RESULT_OK, resultIntent);
-        finish(); // Close MapsActivity
-    } else {
-        Toast.makeText(MapsActivity.this, "No marker to save", Toast.LENGTH_SHORT).show();
+            // Check if the distance exceeds the allowed radius (5 km)
+            if (distance[0] > 5000) {
+                // Marker is outside the allowed radius
+                Toast.makeText(MapsActivity.this, "Kos Terlalu Jauh", Toast.LENGTH_SHORT).show();
+            } else {
+                // Save latitude and longitude to global variables
+                latitu = currentMarkerPosition.latitude;
+                longitu = currentMarkerPosition.longitude;
+
+                // Create an Intent to send back the result
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("SELECTED_LATITUDE", latitu);
+                resultIntent.putExtra("SELECTED_LONGITUDE", longitu);
+
+                setResult(RESULT_OK, resultIntent);
+                finish(); // Close MapsActivity
+            }
+        } else {
+            Toast.makeText(MapsActivity.this, "No marker to save", Toast.LENGTH_SHORT).show();
+        }
     }
-}
 
 }
